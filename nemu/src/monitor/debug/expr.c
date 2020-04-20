@@ -87,7 +87,6 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-        printf("- %d\n", rules[i].token_type);
         switch (rules[i].token_type) {
           case TK_DEC:
           case TK_HEX:
@@ -195,8 +194,6 @@ uint32_t expr(char *e, bool *success) {
     return 0;
   }
 
-  for (int i = 0; i < nr_token; i++)
-    printf("[%s %d]\n", tokens[i].str, tokens[i].type);
   /* TODO: Insert codes to evaluate the expression. */
   int res = eval(0, nr_token - 1, success);
   if (*success == false)
