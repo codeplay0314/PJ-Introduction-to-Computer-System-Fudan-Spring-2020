@@ -194,6 +194,7 @@ uint32_t expr(char *e, bool *success) {
     return 0;
   }
 
+  printf("ddd2\n");
   /* TODO: Insert codes to evaluate the expression. */
   int res = eval(0, nr_token - 1, success);
   if (*success == false)
