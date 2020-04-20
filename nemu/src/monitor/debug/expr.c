@@ -137,7 +137,7 @@ bool check_parentheses(int start, int end, bool *success) {
 }
 
 int eval(int start, int end, bool *success) {
-  printf("[%d %d]", start, end);
+  printf("[%d %d]\n", start, end);
   if (start > end) {
     *success = false;
     return 0;
@@ -192,7 +192,7 @@ int eval(int start, int end, bool *success) {
         case TK_EQ: printf("%d\n", res1 == res2); return res1 == res2;
         default: *success = 0;
       }
-      printf("\n");
+
     return 0;
   }
   return 0;
