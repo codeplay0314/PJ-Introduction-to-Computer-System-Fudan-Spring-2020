@@ -170,6 +170,10 @@ static int cmd_info(char *args) {
     printf("%%esx\t0x%x\n", reg_l(6));
     printf("%%ebx\t0x%x\n", reg_l(7));
   }
+  else if (!strcmp(arg, "pc"))
+    printf("[pc]: , address: 0x%x , value: 0x%x\n", cpu.pc, isa_vaddr_read(cpu.pc, 8));
+  else
+    printf("Please enter \"r\" or \"pc\" after \"info\"\n");
   return 0;
 }
 static int cmd_p(char *args) {
