@@ -132,10 +132,11 @@ bool check_parentheses(int start, int end) {
   return !cnt;
 }
 
-int eval(int start, int end) {
+int eval(int start, int end, bool *success) {
   if (start > end) {
-    Log("please check you expression\n");
-    assert(0);
+    printf("Please enter valid expression\n");
+    *success = false;
+    return 0;
   }
   else if (start == end) {
     /* Single token.
@@ -153,7 +154,7 @@ int eval(int start, int end) {
      * If that is the case, just throw away the parentheses.
      * '('<expr>')' = <expr>
      */
-    return eval(start + 1, end - 1);
+    return eval(start + 1, end - 1, success);
   }
   else {
     /* We should do more things here. */
@@ -176,12 +177,12 @@ int eval(int start, int end) {
     }
 
     switch (tokens[mainop].type) {
-      case '+': return eval(start, mainop - 1) + eval(mainop + 1, end);
-      case '-': return eval(start, mainop - 1) - eval(mainop + 1, end);
-      case '*': return eval(start, mainop - 1) * eval(mainop + 1, end);
-      case '/': return eval(start, mainop - 1) / eval(mainop + 1, end);
-      case TK_EQ: return eval(start, mainop - 1) == eval(mainop + 1, end);
-      default: assert(0);
+      case '+': return eval(start, mainop - 1, success) + eval(mainop + 1, end, success);
+      case '-': return eval(start, mainop - 1, success) - eval(mainop + 1, end, success);
+      case '*': return eval(start, mainop - 1, success) * eval(mainop + 1, end, success);
+      case '/': return eval(start, mainop - 1, success) / eval(mainop + 1, end, success);
+      case TK_EQ: return eval(start, mainop - 1, success) == eval(mainop + 1, end, success);
+      default: *success = 0;
     }
 
     return 0;
@@ -195,5 +196,5 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  return eval(0, nr_token - 1);
+  return eval(0, nr_token - 1, success);
 }
