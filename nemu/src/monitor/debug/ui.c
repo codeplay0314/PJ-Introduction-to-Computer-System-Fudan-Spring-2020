@@ -143,7 +143,7 @@ static int cmd_ls(char *args) {
   struct dirent *dir = readdir(dir_name);
   while (dir) {
     struct stat st;
-   	stat(cwd, &st);
+   	stat(strcat(cwd, dir->d_name), &st);
     if (S_ISDIR(st.st_mode))
       printf("[folder]");
     printf("%s\t", dir->d_name);
