@@ -17,23 +17,6 @@ static int cmd_info(char *);
 static int cmd_p(char *);
 static int cmd_x(char *);
 
-
-static int cmd_si(char *args) {
-  return 0;
-}
-static int cmd_ls(char *args) {
-  return 0;
-}
-static int cmd_info(char *args) {
-  return 0;
-}
-static int cmd_p(char *args) {
-  return 0;
-}
-static int cmd_x(char *args) {
-  return 0;
-}
-
 void cpu_exec(uint64_t);
 void isa_reg_display();
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -122,6 +105,34 @@ static int cmd_pwd(char * args){
   char buf[256];
   if(getcwd(buf, 256) != 0)
     printf("current work path: %s\n", buf);
+  return 0;
+}
+
+static int cmd_si(char *args) {
+  char *arg = strtok(NULL, " ");
+
+  if (arg == NULL)
+    cpu_exec(1);
+  else {
+    int n;
+    if (!sscanf(arg, "%d", &n) || n <= 0)
+      printf("Please enter positive interger!\n");
+    else
+      cpu_exec(n);
+  }
+
+  return 0;
+}
+static int cmd_ls(char *args) {
+  return 0;
+}
+static int cmd_info(char *args) {
+  return 0;
+}
+static int cmd_p(char *args) {
+  return 0;
+}
+static int cmd_x(char *args) {
   return 0;
 }
 
