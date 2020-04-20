@@ -168,7 +168,7 @@ static int cmd_info(char *args) {
     printf("%%edi\t0x%x\n", reg_l(7));
   }
   else if (!strcmp(arg, "pc"))
-    printf("\033[1m\033[33m [pc]\033[0m: , address: 0x%x , value: 0x%x\n", cpu.pc, isa_vaddr_read(cpu.pc, 8));
+    printf("\033[1m\033[33m [pc]:\033[0m , address: 0x%x , value: 0x%x\n", cpu.pc, isa_vaddr_read(cpu.pc, 8));
   else
     printf("Please enter \"r\" or \"pc\" after \"info\"\n");
   return 0;
