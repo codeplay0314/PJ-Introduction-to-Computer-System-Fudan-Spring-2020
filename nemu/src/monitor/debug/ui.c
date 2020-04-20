@@ -150,7 +150,6 @@ static int cmd_ls(char *args) {
    	stat(name, &st);
     if (S_ISDIR(st.st_mode))
       printf("[folder]");
-    printf("%s", name);
     printf("%s\t", dir->d_name);
     putchar('\n');
     dir = readdir(dir_name);
