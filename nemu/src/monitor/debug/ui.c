@@ -103,8 +103,8 @@ static int cmd_echo(char *args){
 
 static int cmd_pwd(char * args){
   char buf[256];
-  if(getcwd(buf, 256) != 0)
-    printf("current work path: %s\n", buf);
+  if (getcwd(buf, 256) != 0)
+    printf("%s\n", buf);
   return 0;
 }
 
@@ -124,6 +124,17 @@ static int cmd_si(char *args) {
   return 0;
 }
 static int cmd_ls(char *args) {
+  char buf[256];
+  struct dirent *dir;
+  if(getcwd(buf, 256) != 0)
+    dir = readdir(opendir(buf));
+  else return 0;
+
+  int cnt = 0;
+  while (dir != NULL) {
+    printf("%s\t\t", dir->d_name);
+    if (cnt++ >4) break;
+  }
   return 0;
 }
 static int cmd_info(char *args) {
