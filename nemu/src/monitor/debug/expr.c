@@ -133,7 +133,7 @@ bool check_parentheses(int start, int end) {
 }
 
 int eval(int start, int end, bool *success) {
-  printf("[%d %d]\n", start, end);
+  //printf("[%d %d]\n", start, end);
   if (start > end) {
     *success = false;
     return 0;
@@ -165,7 +165,7 @@ int eval(int start, int end, bool *success) {
       if (tk == '(') cnt++;
       else if (tk == ')') cnt--;
       else if (!cnt) {
-        printf("- %d -\n", i);
+        //printf("- %d -\n", i);
         if (tk == TK_EQ) {
           mainop = i;
           break;
@@ -177,7 +177,7 @@ int eval(int start, int end, bool *success) {
       }
     }
 
-    printf("---%d---\n", tokens[mainop].type);
+    //printf("---%d---\n", tokens[mainop].type);
     switch (tokens[mainop].type) {
       case '+': return eval(start, mainop - 1, success) + eval(mainop + 1, end, success);
       case '-': return eval(start, mainop - 1, success) - eval(mainop + 1, end, success);
