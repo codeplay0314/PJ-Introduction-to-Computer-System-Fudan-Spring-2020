@@ -2,13 +2,17 @@
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
-
+#include<dirent.h> // for c language, file directory operations (use 'man opendir' for more information)
+#include<unistd.h> // for c language, get work path (use 'man getcwd' for more information)
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void cpu_exec(uint64_t);
+static int cmd_pwd(char *);
+static int cmd_echo(char *); // define functions 
 
+void cpu_exec(uint64_t);
+void isa_reg_display();
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
   static char *line_read = NULL;
@@ -44,14 +48,16 @@ static struct {
   int (*handler) (char *);
 } cmd_table [] = {
   { "help", "Display informations about all supported commands", cmd_help },
-  { "c", "Continue the execution of the program", cmd_c },
+  { "c", "Continue the execution of the program", cmd_c},
   { "q", "Exit NEMU", cmd_q },
-
-  /* TODO: Add more commands */
-
+  /* TODO: Add more commands *
+   * you should add more commands as described in our manual
+   */
+  { "echo", "Print the characters given by user", cmd_echo}, // add by wuran
+  { "pwd", "Print current work path", cmd_pwd}, // add by wuran
 };
 
-#define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
+#define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0])) // number of commands
 
 static int cmd_help(char *args) {
   /* extract the first argument */
@@ -61,18 +67,33 @@ static int cmd_help(char *args) {
   if (arg == NULL) {
     /* no argument given */
     for (i = 0; i < NR_CMD; i ++) {
-      printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+      printf("\033[1m\033[33m [%s]\033[0m - %s\n", cmd_table[i].name, cmd_table[i].description);
     }
   }
   else {
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(arg, cmd_table[i].name) == 0) {
-        printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+        printf("\033[1m\033[33m [%s]\033[0m - %s\n", cmd_table[i].name, cmd_table[i].description);
         return 0;
       }
     }
     printf("Unknown command '%s'\n", arg);
   }
+  return 0;
+}
+
+static int cmd_echo(char *args){
+  // char * arg = strtok(args, " ");
+  if(args != NULL)
+    printf("%s\n", args);
+  else printf("\n");
+  return 0;
+}
+
+static int cmd_pwd(char * args){
+  char buf[256];
+  if(getcwd(buf, 256) != 0)
+    printf("current work path: %s\n", buf);
   return 0;
 }
 

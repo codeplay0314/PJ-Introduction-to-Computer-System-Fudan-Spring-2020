@@ -1,14 +1,14 @@
 #include "nemu.h"
+#include<stdlib.h>
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <sys/types.h>
-#include <regex.h>
+#include <regex.h>  // for c languare, regularized expressions
 
 enum {
-  TK_NOTYPE = 256, TK_EQ
-
+  TK_NOTYPE = 256, TK_EQ=257
   /* TODO: Add more token types */
 
 };
@@ -23,13 +23,12 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"==", TK_EQ}         // equal
+  {"==", TK_EQ},         // equal
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
 
-static regex_t re[NR_REGEX] = {};
+static regex_t re[NR_REGEX] = {}; // regex_t store number of regexs
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
@@ -41,6 +40,7 @@ void init_regex() {
 
   for (i = 0; i < NR_REGEX; i ++) {
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
+    // regcomp(regex_t *preg, const char * regex, int cflags)，description of function regcomp
     if (ret != 0) {
       regerror(ret, &re[i], error_msg, 128);
       panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
@@ -61,7 +61,7 @@ static bool make_token(char *e) {
   int i;
   regmatch_t pmatch;
 
-  nr_token = 0;
+  nr_token = 0; // number of regex tokens
 
   while (e[position] != '\0') {
     /* Try all rules one by one. */
@@ -79,31 +79,23 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-        switch (rules[i].token_type) {
-          default: TODO();
-        }
-
-        break;
-      }
     }
-
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
   }
-
+ }
   return true;
 }
 
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
-    return 0;
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
   return 0;
 }
+
+    

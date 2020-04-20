@@ -15,20 +15,23 @@ enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
  * cpu.gpr[1]._8[1], we will get the 'ch' register. Hint: Use `union'.
  * For more details about the register encoding scheme, see i386 manual.
  */
+typedef struct{
+  union {
+    union {
+      uint32_t _32;
+      uint16_t _16;
+      uint8_t _8[2];
+    } gpr[8];
 
-typedef struct {
-  struct {
-    uint32_t _32;
-    uint16_t _16;
-    uint8_t _8[2];
-  } gpr[8];
+    /* Do NOT change the order of the GPRs' definitions. */
 
-  /* Do NOT change the order of the GPRs' definitions. */
-
-  /* In NEMU, rtlreg_t is exactly uint32_t. This makes RTL instructions
-   * in PA2 able to directly access these registers.
-   */
-  rtlreg_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+    /* In NEMU, rtlreg_t is exactly uint32_t. This makes RTL instructions
+     * in PA2 able to directly access these registers.
+     */
+    struct {
+      rtlreg_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+    };
+  };
 
   vaddr_t pc;
 
@@ -41,6 +44,11 @@ static inline int check_reg_index(int index) {
 
 #define reg_l(index) (cpu.gpr[check_reg_index(index)]._32)
 #define reg_w(index) (cpu.gpr[check_reg_index(index)]._16)
+/*TODO finish the reg_b(index) as above, reg_b(index) takes the 8 bits register.
+ * Examples: reg_b(0) takes al register, however reg_b(4) takes ah register. al and ah are the lower and upper 8 bits of register ax
+ * note that index are range(0, 8)
+ * Hint: mapping i and i+4 both to i, mapping i and i+4 to 0 and 1 for lower and upper 8 bits
+ */
 #define reg_b(index) (cpu.gpr[check_reg_index(index) & 0x3]._8[index >> 2])
 
 static inline const char* reg_name(int index, int width) {
@@ -57,4 +65,5 @@ static inline const char* reg_name(int index, int width) {
   }
 }
 
+void isa_reg_display();
 #endif
