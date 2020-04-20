@@ -125,6 +125,7 @@ static int cmd_si(char *args) {
 
   return 0;
 }
+
 static int cmd_ls(char *args) {
   char *arg = strtok(NULL, " ");
 
@@ -185,9 +186,8 @@ static int cmd_info(char *args) {
   return 0;
 }
 static int cmd_p(char *args) {
-	char *arg = strtok(NULL, "");
 	bool succ = true, *psucc = &succ;
-	uint32_t result = expr(arg, psucc);
+	uint32_t result = expr(args, psucc);
   if (succ)
   	printf("Result is in hex: 0x%xH, is %d in dec\n", result, result);
   return 0;
