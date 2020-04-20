@@ -87,6 +87,7 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
+        printf("- %d\n", rules[i].token_type);
         switch (rules[i].token_type) {
           case TK_DEC:
           case TK_HEX:
@@ -106,10 +107,10 @@ static bool make_token(char *e) {
 
         break;
       }
-    }
-    if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      return false;
+      if (i == NR_REGEX) {
+        printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+        return false;
+      }
     }
   }
   return true;
@@ -195,7 +196,7 @@ uint32_t expr(char *e, bool *success) {
   }
 
   for (int i = 0; i < nr_token; i++)
-    printf("%s %d\n", tokens[i].str, tokens[i].type);
+    printf("[%s %d]\n", tokens[i].str, tokens[i].type);
   /* TODO: Insert codes to evaluate the expression. */
   int res = eval(0, nr_token - 1, success);
   if (*success == false)
