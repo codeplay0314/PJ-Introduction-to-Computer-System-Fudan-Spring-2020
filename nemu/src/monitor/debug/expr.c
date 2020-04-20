@@ -134,7 +134,6 @@ bool check_parentheses(int start, int end) {
 
 int eval(int start, int end, bool *success) {
   if (start > end) {
-    printf("Please enter valid expression\n");
     *success = false;
     return 0;
   }
@@ -196,5 +195,8 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  return eval(0, nr_token - 1, success);
+  int res = eval(0, nr_token - 1, success);
+  if (*success == false)
+    printf("Please enter valid expression\n");
+  return res;
 }
