@@ -159,6 +159,7 @@ static int cmd_ls(char *args) {
 
   return 0;
 }
+
 static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
 
@@ -191,6 +192,7 @@ static int cmd_p(char *args) {
   	printf("Result is in hex: 0x%xH, is %d in dec\n", result, result);
   return 0;
 }
+
 static int cmd_x(char *args) {
   return 0;
 }
