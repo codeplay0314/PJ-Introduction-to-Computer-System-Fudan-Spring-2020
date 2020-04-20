@@ -178,8 +178,6 @@ static int cmd_p(char *args) {
 	uint32_t result = expr(arg, psucc);
   if (succ)
   	printf("Result is in hex: 0x%x, is %d in dec\n", result, result);
-  else
-    printf("Please enter valid expression\n");
   return 0;
 }
 static int cmd_x(char *args) {
