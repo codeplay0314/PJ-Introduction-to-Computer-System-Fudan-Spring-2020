@@ -141,11 +141,11 @@ static int cmd_ls(char *args) {
       dir = readdir(dir_name);
       continue;
     }
-    printf("%s\t\t", dir->d_name);
+    printf("%s\t", dir->d_name);
     if (++cnt % 4 == 0) putchar('\n');
     dir = readdir(dir_name);
   }
-  if (!(cnt % 4)) putchar('\n');
+  if (cnt % 4) putchar('\n');
   closedir(dir_name);
 
   return 0;
