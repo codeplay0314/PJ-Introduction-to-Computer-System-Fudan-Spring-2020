@@ -153,6 +153,23 @@ static int cmd_ls(char *args) {
   return 0;
 }
 static int cmd_info(char *args) {
+  char *arg = strtok(NULL, " ");
+
+	if(arg == NULL) {
+	  printf("Please enter \"r\" or \"pc\" after \"info\"\n");
+	  return 0;
+	}
+
+	if (!strcmp(arg, "r")) {
+		printf("%%eax\t0x%x\n", reg_l(0));
+    printf("%%ecx\t0x%x\n", reg_l(1));
+    printf("%%edx\t0x%x\n", reg_l(2));
+    printf("%%ebx\t0x%x\n", reg_l(3));
+    printf("%%edx\t0x%x\n", reg_l(4));
+    printf("%%esx\t0x%x\n", reg_l(5));
+    printf("%%esx\t0x%x\n", reg_l(6));
+    printf("%%ebx\t0x%x\n", reg_l(7));
+  }
   return 0;
 }
 static int cmd_p(char *args) {
