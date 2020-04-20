@@ -132,12 +132,18 @@ static int cmd_ls(char *args) {
   else
     sscanf(arg, "%s", cwd);
 
-  struct dirent *dir;
-  dir = readdir(opendir(cwd));
-  while (dir != NULL) {
+  DIR *dir_name = opendir(cwd);
+  if (dir_name == NULL) assert(0);
+  struct dirent *dir = readdir(dir_name);
+  while (dir) {
+    if(dir->d_name[0] == '.') {
+      dir = readdir(dir_name);
+      continue;
+    }
     printf("%s\t", dir->d_name);
-    dir++;
+    dir = readdir(dir_name);
   }
+  closedir(dir_name);
 
   return 0;
 }
