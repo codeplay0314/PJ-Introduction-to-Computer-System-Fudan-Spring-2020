@@ -2,14 +2,14 @@
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
-#include<dirent.h> // for c language, file directory operations (use 'man opendir' for more information)
-#include<unistd.h> // for c language, get work path (use 'man getcwd' for more information)
+#include <dirent.h> // for c language, file directory operations (use 'man opendir' for more information)
+#include <unistd.h> // for c language, get work path (use 'man getcwd' for more information)
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
 static int cmd_pwd(char *);
-static int cmd_echo(char *); // define functions 
+static int cmd_echo(char *); // define functions
 
 void cpu_exec(uint64_t);
 void isa_reg_display();

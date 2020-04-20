@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <regex.h>  // for c languare, regularized expressions
 
-enum {
+enum  TK{
   TK_NOTYPE = 256, TK_EQ = 257,
   /* TODO: Add more token types */
   TK_DEC = 10, TK_HEX = 16
@@ -87,21 +87,115 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-    }
-    if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
-      return false;
+        switch (rules[i].token_type) {
+          case TK_DEC:
+          case TK_HEX:
+          case '+':
+          case '-':
+          case '*':
+          case '/':
+          case '(':
+          case ')':
+          case TK_EQ: {
+            tokens[nr_token].type = rules[i].token_type;
+            strncpy(tokens[nr_token++].str, substr_start, substr_len);
+          }break;
+          case TK_NOTYPE: continue;
+          default: assert(0);
+        }
+
+        break;
+      }
+      if (i == NR_REGEX) {
+        printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+        return false;
+      }
     }
   }
- }
   return true;
+}
+
+bool check_parentheses(int start, int end) {
+  if (tokens[start].type != '(' || tokens[end].type != ')') return false;
+
+  int i, cnt;
+  for (i = start + 1, cnt = 1; i <= end; i++) {
+    enum TK tk = tokens[i].type;
+    if (tk == '(') cnt++;
+    else if (tk == ')') {
+      --cnt;
+      if (cnt == -1) return false;
+      assert(cnt > -1);
+    }
+  }
+
+  return !cnt;
+}
+
+int eval(int start, int end) {
+  if (start > end) {
+    Log("please check you expression\n");
+    assert(0);
+  }
+  else if (start == end) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+   int res = 0;
+   if (tokens[start].type == TK_DEC) sscanf(tokens[start].str, "%d", &res);
+   else if (tokens[start].type == TK_HEX) sscanf(tokens[start].str, "%x", &res);
+   else assert(0);
+   return res;
+  }
+  else if (check_parentheses(start, end) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     * '('<expr>')' = <expr>
+     */
+    return eval(start + 1, end - 1);
+  }
+  else {
+    /* We should do more things here. */
+    int mainop = start;
+    int i, cnt;
+    for (i = start, cnt = 0; i <= end; i++) {
+      enum TK tk = tokens[i].type;
+      if (tk == '(') cnt++;
+      else if (tk == ')') cnt--;
+      else if (!cnt) {
+        if (tk == TK_EQ) {
+          mainop = i;
+          break;
+        }
+        else if (tk == '+' || tk == '-') mainop = i;
+        else {
+          if (tokens[mainop].type != '+' && tokens[mainop].type != '-') mainop = i;
+        }
+      }
+    }
+
+    switch (tokens[mainop].type) {
+      case '+': return eval(start, mainop - 1) + eval(mainop + 1, end);
+      case '-': return eval(start, mainop - 1) - eval(mainop + 1, end);
+      case '*': return eval(start, mainop - 1) * eval(mainop + 1, end);
+      case '/': return eval(start, mainop - 1) / eval(mainop + 1, end);
+      case TK_EQ: return eval(start, mainop - 1) == eval(mainop + 1, end);
+      default: assert(0);
+    }
+
+    return 0;
+  }
 }
 
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
+    return 0;
   }
 
   /* TODO: Insert codes to evaluate the expression. */
+  eval(0, nr_token - 1);
+
   return 0;
 }
