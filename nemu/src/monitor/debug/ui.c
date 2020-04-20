@@ -176,7 +176,7 @@ static int cmd_p(char *args) {
 	char *arg = strtok(NULL, " ");
 	bool succ = true, *psucc = &succ;
 	uint32_t result = expr(arg, psucc);
-	printf("%s = %u\t0x%x\n", arg, result, result);
+	printf("Result is in hex: 0x%x, is %d in dec\n", result, result);
   return 0;
 }
 static int cmd_x(char *args) {
