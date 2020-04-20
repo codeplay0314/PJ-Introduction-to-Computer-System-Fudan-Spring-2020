@@ -30,8 +30,8 @@ static struct rule {
   {"\\)", ')'},               // right parenthesis
   {" +", TK_NOTYPE},          // spaces
   {"==", TK_EQ},              // equal
-  {"[0-9]+", TK_DEC},         // decimal number
-  {"0x[0-9a-f]+", TK_HEX}     // hexadecimal number
+  {"0x[0-9a-f]+", TK_HEX},    // hexadecimal number
+  {"[0-9]+", TK_DEC}          // decimal number
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
