@@ -195,8 +195,19 @@ static int cmd_p(char *args) {
 
 static int cmd_x(char *args) {
   int n;
-  sscanf(args, "%d", &n);
-  printf("%s", args);
+  char arg[256];
+  if (!sscanf(args, "%d %s", &n, arg)) {
+    printf("Pleas enter valid input\n");
+    return 0;
+  }
+	bool succ = true, *psucc = &succ;
+	uint32_t result = expr(arg, psucc);
+  if (n <= 0 || !succ) {
+    printf("Pleas enter valid input\n");
+    return 0;
+  }
+
+  printf("%d\n", result);
   return 0;
 }
 
