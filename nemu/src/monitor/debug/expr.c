@@ -171,7 +171,7 @@ int eval(int start, int end, bool *success) {
           break;
         }
         else if (tk == '+' || tk == '-') mainop = i;
-        else {
+        else if (tk == '*' || tk == '/') {
           if (tokens[mainop].type != '+' && tokens[mainop].type != '-') mainop = i;
         }
       }
