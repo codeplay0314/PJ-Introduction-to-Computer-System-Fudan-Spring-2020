@@ -8,8 +8,31 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+/* define functions */
 static int cmd_pwd(char *);
-static int cmd_echo(char *); // define functions
+static int cmd_echo(char *);
+static int cmd_si(char *);
+static int cmd_ls(char *);
+static int cmd_info(char *);
+static int cmd_p(char *);
+static int cmd_x(char *);
+
+
+static int cmd_si(char *args) {
+  return 0;
+}
+static int cmd_ls(char *args) {
+  return 0;
+}
+static int cmd_info(char *args) {
+  return 0;
+}
+static int cmd_p(char *args) {
+  return 0;
+}
+static int cmd_x(char *args) {
+  return 0;
+}
 
 void cpu_exec(uint64_t);
 void isa_reg_display();
@@ -48,13 +71,18 @@ static struct {
   int (*handler) (char *);
 } cmd_table [] = {
   { "help", "Display informations about all supported commands", cmd_help },
-  { "c", "Continue the execution of the program", cmd_c},
+  { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   /* TODO: Add more commands *
    * you should add more commands as described in our manual
    */
-  { "echo", "Print the characters given by user", cmd_echo}, // add by wuran
-  { "pwd", "Print current work path", cmd_pwd}, // add by wuran
+  { "info", "Print information of register and watchpoints", cmd_info },
+  { "si", "Execute for N steps, if N is not given, exec_once", cmd_si },
+  { "x", "Scan Memory from start, from total N bytes", cmd_x },
+  { "p", "Compute the value of an expression", cmd_p },
+  { "echo", "Print the characters given by user", cmd_echo }, // add by wuran
+  { "pwd", "Print current work path", cmd_pwd }, // add by wuran
+  { "ls", "List all files in give path", cmd_ls },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0])) // number of commands
