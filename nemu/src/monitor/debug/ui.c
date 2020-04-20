@@ -152,7 +152,6 @@ static int cmd_ls(char *args) {
       printf("\33[1;34m%s\t\33[0m\n", dir->d_name);
     else
       printf("%s\t", dir->d_name);
-    putchar('\n');
     dir = readdir(dir_name);
   }
   closedir(dir_name);
