@@ -194,6 +194,9 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_x(char *args) {
+  int n;
+  sscanf(args, "%d", &n);
+  printf("%s", args);
   return 0;
 }
 
