@@ -177,7 +177,7 @@ int eval(int start, int end, bool *success) {
       }
     }
 
-    printf("---%d---\n", tokens[mainop].type);
+    printf("---%d---\n", mainop);
     switch (tokens[mainop].type) {
       case '+': return eval(start, mainop - 1, success) + eval(mainop + 1, end, success);
       case '-': return eval(start, mainop - 1, success) - eval(mainop + 1, end, success);
