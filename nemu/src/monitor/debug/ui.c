@@ -124,18 +124,21 @@ static int cmd_si(char *args) {
   return 0;
 }
 static int cmd_ls(char *args) {
-  char buf[256];
-  struct dirent *dir;
-  if(getcwd(buf, 256) != 0)
-    dir = readdir(opendir(buf));
-  else return 0;
+  char *arg = strtok(NULL, " ");
 
-  int cnt = 0;
+  char cwd[256];
+  if (arg == NULL)
+    assert(getcwd(cwd, 256));
+  else
+    sscanf(arg, "%s", cwd);
+
+  struct dirent *dir;
+  dir = readdir(opendir(cwd));
   while (dir != NULL) {
     printf("%s\t", dir->d_name);
     dir++;
-    if (cnt++ > 4)break;
   }
+
   return 0;
 }
 static int cmd_info(char *args) {
