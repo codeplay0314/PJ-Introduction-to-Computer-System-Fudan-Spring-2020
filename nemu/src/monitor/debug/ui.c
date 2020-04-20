@@ -111,15 +111,16 @@ static int cmd_pwd(char * args){
 static int cmd_si(char *args) {
   char *arg = strtok(NULL, " ");
 
+  int n;
   if (arg == NULL)
-    cpu_exec(1);
+    cpu_exec(n = 1);
   else {
-    int n;
     if (!sscanf(arg, "%d", &n) || n <= 0)
       printf("Please enter positive interger!\n");
     else
       cpu_exec(n);
   }
+  printf("execute for %d steps finished.\n", n);
 
   return 0;
 }
