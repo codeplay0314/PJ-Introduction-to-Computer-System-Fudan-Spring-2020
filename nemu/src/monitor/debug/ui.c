@@ -212,7 +212,7 @@ static int cmd_x(char *args) {
   for (i = 0; i < n; i++) {
     printf("0x%08x:", result + (i << 2));
     for (int j = 0; j < 4; j++)
-      printf("\t0x%02d", *(p++));
+      printf("\t0x%02x", *(p++));
     putchar('\n');
   }
   return 0;
