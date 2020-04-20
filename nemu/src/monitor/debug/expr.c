@@ -137,7 +137,7 @@ bool check_parentheses(int start, int end, bool *success) {
 }
 
 int eval(int start, int end, bool *success) {
-  printf("[%d %d]\n", start, end);
+  //printf("[%d %d]\n", start, end);
   if (start > end) {
     *success = false;
     return 0;
@@ -171,7 +171,6 @@ int eval(int start, int end, bool *success) {
       if (tk == '(') cnt++;
       else if (tk == ')') cnt--;
       else if (!cnt) {
-        printf("- %d -\n", i);
         if (tk == TK_EQ) {
           mainop = i;
           break;
@@ -183,15 +182,17 @@ int eval(int start, int end, bool *success) {
       }
     }
 
-    printf("---%d---\n", mainop);
-    switch (tokens[mainop].type) {
-      case '+': return eval(start, mainop - 1, success) + eval(mainop + 1, end, success);
-      case '-': return eval(start, mainop - 1, success) - eval(mainop + 1, end, success);
-      case '*': return eval(start, mainop - 1, success) * eval(mainop + 1, end, success);
-      case '/': return eval(start, mainop - 1, success) / eval(mainop + 1, end, success);
-      case TK_EQ: return eval(start, mainop - 1, success) == eval(mainop + 1, end, success);
-      default: *success = 0;
-    }
+    //printf("---%d---\n", mainop);
+    int res1 = eval(start, mainop - 1, success), res2 = eval(mainop + 1, end, success);
+    if (*success)
+      switch (tokens[mainop].type) {
+        case '+': return res1 + res2;
+        case '-': return res1 - res2;
+        case '*': return res1 * res2;
+        case '/': return res1 / res2;
+        case TK_EQ: return res1 == res2;
+        default: *success = 0;
+      }
 
     return 0;
   }
