@@ -135,7 +135,7 @@ static int cmd_ls(char *args) {
 
   DIR *dir_name = opendir(cwd);
   if (dir_name == NULL) {
-    printf("No such file or directory\n");
+    printf("ls: cannot access '%s': No such file or directory\n", cwd);
     return 0;
   }
   struct dirent *dir = readdir(dir_name);
