@@ -130,9 +130,11 @@ static int cmd_ls(char *args) {
     dir = readdir(opendir(buf));
   else return 0;
 
+  int cnt = 0;
   while (dir != NULL) {
-    printf("%s\t\t", dir->d_name);
+    printf("%s\t", dir->d_name);
     dir++;
+    if (cnt++ > 4)break;
   }
   return 0;
 }
