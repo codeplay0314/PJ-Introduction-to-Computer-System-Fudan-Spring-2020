@@ -100,7 +100,7 @@ static bool make_token(char *e) {
             tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token++].str, substr_start, substr_len);
           }break;
-          case TK_NOTYPE: continue;
+          case TK_NOTYPE: break;
           default: return false;
         }
 
