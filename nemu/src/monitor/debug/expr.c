@@ -101,7 +101,7 @@ static bool make_token(char *e) {
             strncpy(tokens[nr_token++].str, substr_start, substr_len);
           }break;
           case TK_NOTYPE: continue;
-          default: assert(0);
+          default: return false;
         }
 
         break;
@@ -145,7 +145,7 @@ int eval(int start, int end, bool *success) {
    int res = 0;
    if (tokens[start].type == TK_DEC) sscanf(tokens[start].str, "%d", &res);
    else if (tokens[start].type == TK_HEX) sscanf(tokens[start].str, "%x", &res);
-   else assert(0);
+   else *success = false;
    return res;
   }
   else if (check_parentheses(start, end) == true) {
