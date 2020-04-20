@@ -173,7 +173,7 @@ static int cmd_info(char *args) {
   return 0;
 }
 static int cmd_p(char *args) {
-	char *arg = strtok(NULL, " ");
+	char *arg = strtok(NULL, "");
 	bool succ = true, *psucc = &succ;
 	uint32_t result = expr(arg, psucc);
   if (succ)
