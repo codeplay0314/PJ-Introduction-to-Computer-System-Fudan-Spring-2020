@@ -177,7 +177,7 @@ static int cmd_p(char *args) {
 	bool succ = true, *psucc = &succ;
 	uint32_t result = expr(arg, psucc);
   if (succ)
-  	printf("Result is in hex: 0x%x, is %d in dec\n", result, result);
+  	printf("Result is in hex: 0x%xH, is %d in dec\n", result, result);
   return 0;
 }
 static int cmd_x(char *args) {
