@@ -127,13 +127,17 @@ static int cmd_ls(char *args) {
   char *arg = strtok(NULL, " ");
 
   char cwd[256];
-  if (arg == NULL)
-    assert(getcwd(cwd, 256));
+  if (arg == NULL) {
+    if (!getcwd(cwd, 256)) return 0;
+  }
   else
     sscanf(arg, "%s", cwd);
 
   DIR *dir_name = opendir(cwd);
-  if (dir_name == NULL) assert(0);
+  if (dir_name == NULL) {
+    printf("No such file or directory\n");
+    return 0;
+  }
   struct dirent *dir = readdir(dir_name);
   while (dir) {
     if(dir->d_name[0] == '.') {
