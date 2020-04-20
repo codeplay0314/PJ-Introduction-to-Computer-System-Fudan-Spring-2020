@@ -115,21 +115,25 @@ static bool make_token(char *e) {
   return true;
 }
 
-bool check_parentheses(int start, int end) {
+bool check_parentheses(int start, int end, bool *success) {
   if (tokens[start].type != '(' || tokens[end].type != ')') return false;
 
   int i, cnt;
-  for (i = start + 1, cnt = 1; i <= end; i++) {
+  for (i = start + 1, cnt = 1; i < end; i++) {
     enum TK tk = tokens[i].type;
     if (tk == '(') cnt++;
     else if (tk == ')') {
       --cnt;
-      if (cnt == -1) return false;
-      assert(cnt > -1);
+      if (cnt < 0) {
+        *success = false;
+        return false;
+      }
+      if (!cnt)
+        return false;
     }
   }
 
-  return !cnt;
+  return cnt == 1;
 }
 
 int eval(int start, int end, bool *success) {
@@ -149,14 +153,15 @@ int eval(int start, int end, bool *success) {
    else *success = false;
    return res;
   }
-  else if (check_parentheses(start, end) == true) {
+  else if (check_parentheses(start, end, success) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      * '('<expr>')' = <expr>
      */
+
     return eval(start + 1, end - 1, success);
   }
-  else {
+  else if (*success) {
     /* We should do more things here. */
     int mainop = start;
     int i, cnt;
@@ -190,6 +195,7 @@ int eval(int start, int end, bool *success) {
 
     return 0;
   }
+  return 0;
 }
 
 uint32_t expr(char *e, bool *success) {
