@@ -1,5 +1,5 @@
 #include "nemu.h"
-#include<stdlib.h>
+#include <stdlib.h>
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
@@ -8,9 +8,9 @@
 #include <regex.h>  // for c languare, regularized expressions
 
 enum {
-  TK_NOTYPE = 256, TK_EQ=257
+  TK_NOTYPE = 256, TK_EQ = 257,
   /* TODO: Add more token types */
-
+  TK_DEC = 10, TK_HEX = 16
 };
 
 static struct rule {
@@ -22,8 +22,16 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
-  {"==", TK_EQ},         // equal
+  {"\\+", '+'},               // plus
+  {"\\-", '-'},               // minus
+  {"\\*", '*'},               // mutiply
+  {"\\/", '/'},               // devide
+  {"\\(", '('},               // left parenthesis
+  {"\\)", ')'},               // right parenthesis
+  {" +", TK_NOTYPE},          // spaces
+  {"==", TK_EQ},              // equal
+  {"[0-9]+", TK_DEC},         // decimal number
+  {"0x[0-9a-f]+", TK_HEX}     // hexadecimal number
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -97,5 +105,3 @@ uint32_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
   return 0;
 }
-
-    
