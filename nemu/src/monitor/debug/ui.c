@@ -196,6 +196,9 @@ static int cmd_p(char *args) {
 static int cmd_x(char *args) {
   int n;
   char arg[256];
+  for (n = 0; args[n]; n++) {
+    printf("[%c]", args[n]);
+  }
   if (!sscanf(args, "%d %[^\n]", &n, arg)) {
     printf("Pleas enter valid input\n");
     return 0;
