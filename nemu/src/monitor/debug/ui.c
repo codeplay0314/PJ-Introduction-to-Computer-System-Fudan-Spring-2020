@@ -149,7 +149,7 @@ static int cmd_ls(char *args) {
     strcat(name, dir->d_name);
    	stat(name, &st);
     if (S_ISDIR(st.st_mode))
-      printf("\33[1;34m%s\t\33[0m\n", dir->d_name);
+      printf("\33[1;34m%s\t\33[0m", dir->d_name);
     else
       printf("%s\t", dir->d_name);
     dir = readdir(dir_name);
