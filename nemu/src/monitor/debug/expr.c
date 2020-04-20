@@ -133,7 +133,7 @@ bool check_parentheses(int start, int end) {
 }
 
 int eval(int start, int end, bool *success) {
-  //printf("[%d %d]\n", start, end);
+  printf("[%d %d]\n", start, end);
   if (start > end) {
     *success = false;
     return 0;
