@@ -161,10 +161,10 @@ static int cmd_info(char *args) {
     printf("%%ecx\t0x%x\n", reg_l(1));
     printf("%%edx\t0x%x\n", reg_l(2));
     printf("%%ebx\t0x%x\n", reg_l(3));
-    printf("%%edx\t0x%x\n", reg_l(4));
-    printf("%%esx\t0x%x\n", reg_l(5));
-    printf("%%esx\t0x%x\n", reg_l(6));
-    printf("%%ebx\t0x%x\n", reg_l(7));
+    printf("%%esp\t0x%x\n", reg_l(4));
+    printf("%%ebp\t0x%x\n", reg_l(5));
+    printf("%%esi\t0x%x\n", reg_l(6));
+    printf("%%edi\t0x%x\n", reg_l(7));
   }
   else if (!strcmp(arg, "pc"))
     printf("[pc]: , address: 0x%x , value: 0x%x\n", cpu.pc, isa_vaddr_read(cpu.pc, 8));
