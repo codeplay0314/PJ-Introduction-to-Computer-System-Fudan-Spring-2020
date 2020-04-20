@@ -173,6 +173,10 @@ static int cmd_info(char *args) {
   return 0;
 }
 static int cmd_p(char *args) {
+	char *arg = strtok(NULL, " ");
+	bool succ = true, *psucc = &succ;
+	uint32_t result = expr(arg, psucc);
+	printf("%s = %u\t0x%x\n", arg, result, result);
   return 0;
 }
 static int cmd_x(char *args) {
