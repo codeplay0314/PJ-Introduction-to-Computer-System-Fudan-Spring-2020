@@ -180,7 +180,7 @@ int eval(int start, int end, bool *success) {
      * Return the value of the number.
      */
 
-   printf("--%s--\n", tokens[start].str);
+   //printf("--%s--\n", tokens[start].str);
    const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
    const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
    const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
