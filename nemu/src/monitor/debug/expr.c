@@ -169,7 +169,7 @@ bool check_parentheses(int start, int end, bool *success) {
 }
 
 int eval(int start, int end, bool *success) {
-  printf("[%d %d]\n", start, end);
+  //printf("[%d %d]\n", start, end);
   if (start > end) {
     *success = false;
     return 0;
@@ -252,7 +252,7 @@ int eval(int start, int end, bool *success) {
       }
     }
 
-    printf("---%d---\n", mainop);
+    //printf("---%d---\n", mainop);
     int res = 0;
     if (mainop == start) {
       res = eval(start + 1, end, success);
@@ -263,8 +263,6 @@ int eval(int start, int end, bool *success) {
           case TK_POINTER: res =  isa_vaddr_read(res, 4); break;
           default: *success = 0;
         }
-        printf("$%d %d %d$\n", start, end, res);
-        return res;
       }
     } else if (*success) {
       int res1 = eval(start, mainop - 1, success), res2 = eval(mainop + 1, end, success);
@@ -279,10 +277,9 @@ int eval(int start, int end, bool *success) {
         case TK_UEQ: res = res1 != res2; break;
         default: *success = 0;
       }
-      printf("$%d %d %d$\n", start, end, res);
-      return res;
     }
-    return 0;
+    //printf("$%d %d %d$\n", start, end, res);
+    return res;
   }
   return 0;
 }
