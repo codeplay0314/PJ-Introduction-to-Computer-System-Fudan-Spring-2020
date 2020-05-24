@@ -189,7 +189,7 @@ int eval(int start, int end, bool *success) {
    else if (tokens[start].type == TK_HEX) sscanf(tokens[start].str, "%x", &res);
    else if (tokens[start].type == TK_REG) {
      bool ok = false;
-     if (!strcmp(tokens[start].str + 1, "pc")) res = isa_vaddr_read(cpu.pc, 8), ok = true;
+     if (!strcmp(tokens[start].str + 1, "pc")) res = isa_vaddr_read(cpu.pc, 4), ok = true;
      else {
        for (int i = 0; i < 8; i++) {
          if (!strcmp(tokens[start].str + 1, regsl[i])) {
