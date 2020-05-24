@@ -262,7 +262,7 @@ int eval(int start, int end, bool *success) {
         switch (tokens[mainop].type) {
           case '!': /*printf("%d\n", !res);*/ return !res;
           case TK_MINUS: /*printf("%d\n", -res);*/ return -res;
-          case TK_POINTER: /*printf("%d\n", res);*/ return isa_vaddr_read(cpu.pc, 8);
+          case TK_POINTER: /*printf("%d\n", res);*/ return isa_vaddr_read(res, 4);
           default: *success = 0;
         }
       }
