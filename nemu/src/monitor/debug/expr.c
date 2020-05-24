@@ -36,7 +36,7 @@ static struct rule {
   {"!", '!'},                               // not
   {"0x[0-9a-f]+", TK_HEX},                  // hexadecimal number
   {"[0-9]+", TK_DEC},                       // decimal number
-  {"\\$[aehilpx]{2,3}", TK_REG},            // register
+  {"\\$[a-ehilpx]{2,3}", TK_REG},            // register
   {"\\(", '('},                             // left parenthesis
   {"\\)", ')'}                              // right parenthesis
 };
