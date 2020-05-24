@@ -10,6 +10,7 @@
 enum  TK{
   TK_NOTYPE = 256, TK_EQ = 257,
   /* TODO: Add more token types */
+  TK_UEQ = 258, TK_REG = 255,
   TK_DEC = 10, TK_HEX = 16
 };
 
@@ -22,16 +23,20 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
+  {" +", TK_NOTYPE},          // spaces
   {"\\+", '+'},               // plus
   {"\\-", '-'},               // minus
   {"\\*", '*'},               // mutiply
   {"\\/", '/'},               // devide
-  {"\\(", '('},               // left parenthesis
-  {"\\)", ')'},               // right parenthesis
-  {" +", TK_NOTYPE},          // spaces
   {"==", TK_EQ},              // equal
+  {"!=", TK_UEQ},             // unequal
+  {"&&", '&'},                // and
+  {"\\|\\|", '|'},            // or
+  {"!", '!'},                 // not
   {"0x[0-9a-f]+", TK_HEX},    // hexadecimal number
-  {"[0-9]+", TK_DEC}          // decimal number
+  {"[0-9]+", TK_DEC},         // decimal number
+  {"\\(", '('},               // left parenthesis
+  {"\\)", ')'}                // right parenthesis
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
