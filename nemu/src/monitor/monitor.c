@@ -106,6 +106,7 @@ int init_monitor(int argc, char *argv[]) {
 
   /* Initialize differential testing. */
   init_difftest(diff_so_file, img_size);
+  printf("%s %ld\n", diff_so_file, img_size);
 
   /* Display welcome message. */
   welcome();
