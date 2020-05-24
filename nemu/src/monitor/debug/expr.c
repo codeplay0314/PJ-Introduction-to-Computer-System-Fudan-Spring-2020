@@ -199,7 +199,7 @@ int eval(int start, int end, bool *success) {
   return 0;
 }
 
-unsigned expr(char *e, bool *success) {
+uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
