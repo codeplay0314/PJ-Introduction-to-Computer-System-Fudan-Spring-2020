@@ -74,7 +74,7 @@ static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
   if (!e) {
-    printf("Please enter an expression.");
+    printf("Please enter an expression.\n");
     return false;
   }
   int position = 0;
@@ -149,7 +149,7 @@ static bool make_token(char *e) {
 //     printf("%s", tokens[i].str);
 //   putchar('\n');
   if (!nr_token) {
-    printf("Please enter an expression.");
+    printf("Please enter an expression.\n");
     return false;
   }
   return true;
