@@ -34,7 +34,7 @@ WP *new_wp(char *msg, int val) {
   free_->is_free = 0;free_->changed = 0;free_->cval = 0;
   head = free_;free_ = newfree;
 
-  Log("Successfully create watchpoint %s.", msg);
+  printf("Successfully create watchpoint %s.\n", msg);
   return free_;
 }
 
@@ -65,19 +65,6 @@ void free_wp(int no) {
 void print_wp() {
   for (WP* now_wp = head;now_wp !=  NULL;now_wp = now_wp->next) {
     printf("watchpoint %d: msg:%s val:%d\n", now_wp->NO, now_wp->msg, now_wp->val);
-  }
-  return;
-}
-
-void print_C_wp() {
-  for (WP* now_wp = head;now_wp !=  NULL;now_wp = now_wp->next) {
-    if (now_wp->changed) {
-      printf("Watchpoint %d: %s\n", now_wp->NO, now_wp->msg);
-      printf("Old value = 0x%08x\n", now_wp->val);
-      printf("New value = 0x%08x\n", now_wp->cval);
-      now_wp->val = now_wp->cval;
-      now_wp->changed = 0;
-    }
   }
   return;
 }

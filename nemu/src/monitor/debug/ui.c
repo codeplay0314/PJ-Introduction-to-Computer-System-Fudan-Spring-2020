@@ -227,7 +227,7 @@ static int cmd_w(char *args) {
 static int cmd_d(char *args) {
   char *arg = strtok(NULL, " ");
 
-	if(arg == NULL) delete_all_wp();
+  if(arg == NULL) delete_all_wp();
   else {
     int n;
     if (!sscanf(arg, "%d", &n) || n <= 0) {
