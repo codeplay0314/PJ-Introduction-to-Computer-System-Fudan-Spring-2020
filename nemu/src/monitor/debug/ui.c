@@ -170,14 +170,7 @@ static int cmd_info(char *args) {
 	}
 
 	if (!strcmp(arg, "r")) {
-		printf("%%eax\t0x%x\n", reg_l(0));
-    printf("%%ecx\t0x%x\n", reg_l(1));
-    printf("%%edx\t0x%x\n", reg_l(2));
-    printf("%%ebx\t0x%x\n", reg_l(3));
-    printf("%%esp\t0x%x\n", reg_l(4));
-    printf("%%ebp\t0x%x\n", reg_l(5));
-    printf("%%esi\t0x%x\n", reg_l(6));
-    printf("%%edi\t0x%x\n", reg_l(7));
+    isa_reg_display();
   }
   else if (!strcmp(arg, "pc"))
     printf("\033[1m\033[33m[pc]:\033[0m , address: 0x%x, value: 0x%x\n", cpu.pc, isa_vaddr_read(cpu.pc, 8));
