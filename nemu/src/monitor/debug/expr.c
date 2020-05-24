@@ -144,8 +144,9 @@ static bool make_token(char *e) {
 //   for (int i = 0; i < nr_token; i++)
 //     printf("%s", tokens[i].str);
 //   putchar('\n');
+  printf("---%d---\n", nr_token);
   if (!nr_token) {
-    printf("Please enter an expression");
+    printf("Please enter an expression.");
     return false;
   }
   return true;
