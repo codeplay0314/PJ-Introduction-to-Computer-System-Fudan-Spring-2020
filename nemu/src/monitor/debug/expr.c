@@ -101,7 +101,6 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
           case '+':
           case '-':
-          case '*':
           case '/':
           case TK_EQ:
           case TK_UEQ:
@@ -116,6 +115,17 @@ static bool make_token(char *e) {
             if (nr_token >= token_capacity)
               panic("Too many tokens for the expression!");
             tokens[nr_token].type = rules[i].token_type;
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token++].str[substr_len] = 0;
+          }break;
+          case '*': {
+            if (nr_token >= token_capacity)
+              panic("Too many tokens for the expression!");
+            if (!nr_token || (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_HEX \
+              && tokens[nr_token - 1].type != TK_REG && tokens[nr_token - 1].type != ')'))
+                tokens[nr_token].type = TK_POINTER;
+            else
+              tokens[nr_token].type = '*';
             strncpy(tokens[nr_token].str, substr_start, substr_len);
             tokens[nr_token++].str[substr_len] = 0;
           }break;
