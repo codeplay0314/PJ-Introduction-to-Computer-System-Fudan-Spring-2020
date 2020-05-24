@@ -243,13 +243,11 @@ int eval(int start, int end, bool *success) {
           if (tokens[mainop].type != '&' && tokens[mainop].type != '|') mainop = i;
         }
         else if (tk == '+' || tk == '-') {
-          if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
-            tokens[mainop].type != '+' && tokens[mainop].type != '-') mainop = i;
+          if (tokens[mainop].type != '&' && tokens[mainop].type != '|') mainop = i;
         }
         else if (tk == '*' || tk == '/') {
           if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
-            tokens[mainop].type != '+' && tokens[mainop].type != '-' && \
-              tokens[mainop].type != '*' && tokens[mainop].type != '/') mainop = i;
+            tokens[mainop].type != '+' && tokens[mainop].type != '-') mainop = i;
         }
       }
     }
