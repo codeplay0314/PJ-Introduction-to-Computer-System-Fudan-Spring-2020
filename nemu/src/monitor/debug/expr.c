@@ -271,6 +271,7 @@ int eval(int start, int end, bool *success) {
         case '-': res = res1 - res2; break;
         case '*': res = res1 * res2; break;
         case '/':
+          puts("--------");
           if (!res2) assert("Error: Division by zero");
           res = res1 / res2;
           break;
