@@ -100,6 +100,8 @@ static bool make_token(char *e) {
           case '(':
           case ')':
           case TK_EQ: {
+            if (nr_token >= 1000)
+              panic("Too many tokens!");
             tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start, substr_len);
             tokens[nr_token++].str[substr_len] = 0;
