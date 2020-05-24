@@ -61,7 +61,7 @@ typedef struct token {
   char str[32];
 } Token;
 
-#define token_capacity 33
+#define token_capacity 200
 static Token tokens[token_capacity] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
