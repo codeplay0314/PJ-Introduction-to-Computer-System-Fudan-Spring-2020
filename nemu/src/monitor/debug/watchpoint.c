@@ -1,5 +1,6 @@
-#include "monitor/watchpoint.h"
+#include "nemu.h"
 #include "monitor/expr.h"
+#include "monitor/watchpoint.h"
 
 #define NR_WP 32
 
@@ -33,6 +34,7 @@ WP *new_wp(char *msg, int val) {
   free_->is_free = 0;free_->changed = 0;free_->cval = 0;
   head = free_;free_ = newfree;
 
+  Log("Successfully create watchpoint %s.", msg);
   return free_;
 }
 

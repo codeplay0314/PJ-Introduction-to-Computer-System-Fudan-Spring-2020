@@ -217,6 +217,28 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_w(char *args) {
+  bool success = true;
+  int val = expr(args, &success);
+  if (success) new_wp(args, val);
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  char *arg = strtok(NULL, " ");
+
+	if(arg == NULL) delete_all_wp();
+  else {
+    int n;
+    if (!sscanf(arg, "%d", &n) || n <= 0) {
+      printf("Please enter positive interger!\n");
+      return 0;
+    }
+    free_wp(n);
+  }
+  return 0;
+}
+
 void ui_mainloop(int is_batch_mode) {
   if (is_batch_mode) {
     cmd_c(NULL);
@@ -253,27 +275,4 @@ void ui_mainloop(int is_batch_mode) {
 
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
   }
-}
-
-static int cmd_w(char *args) {
-  bool success = true;
-  int val = expr(args, &success);
-	if (success) new_wp(args, val);
-  Log("Successfully create watchpoint %s.", args);
-  return 0;
-}
-
-static int cmd_d(char *args) {
-  char *arg = strtok(NULL, " ");
-
-	if(arg == NULL) delete_all_wp();
-  else {
-    int n;
-    if (!sscanf(arg, "%d", &n) || n <= 0) {
-      printf("Please enter positive interger!\n");
-      return 0;
-    }
-    free_wp(n);
-  }
-  return 0;
 }
