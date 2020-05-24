@@ -189,7 +189,7 @@ int eval(int start, int end, bool *success) {
    else if (tokens[start].type == TK_HEX) sscanf(tokens[start].str, "%x", &res);
    else if (tokens[start].type == TK_REG) {
      bool ok = false;
-     if (!strcmp(tokens[start].str + 1, "pc")) res = isa_vaddr_read(cpu.pc, 4), ok = true;
+     if (!strcmp(tokens[start].str + 1, "pc")) res = isa_vaddr_read(cpu.pc, 8), ok = true;
      else {
        for (int i = 0; i < 8; i++) {
          if (!strcmp(tokens[start].str + 1, regsl[i])) {
@@ -266,6 +266,7 @@ int eval(int start, int end, bool *success) {
       }
     } else if (*success) {
       int res1 = eval(start, mainop - 1, success), res2 = eval(mainop + 1, end, success);
+      if (tokens[mainop].type == '/' && !res2) assert("Error: Division by zero");
       switch (tokens[mainop].type) {
         case '+': res = res1 + res2; break;
         case '-': res = res1 - res2; break;
