@@ -61,7 +61,8 @@ typedef struct token {
   char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+#define token_capacity 32
+static Token tokens[token_capacity] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
@@ -100,7 +101,7 @@ static bool make_token(char *e) {
           case '(':
           case ')':
           case TK_EQ: {
-            if (nr_token >= 1000)
+            if (nr_token >= token_capacity)
               panic("Too many tokens!");
             tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start, substr_len);
