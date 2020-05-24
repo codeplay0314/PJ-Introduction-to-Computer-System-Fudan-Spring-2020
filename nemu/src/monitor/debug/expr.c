@@ -255,31 +255,34 @@ int eval(int start, int end, bool *success) {
     }
 
     printf("---%d---\n", mainop);
+    int res = 0;
     if (mainop == start) {
-      int res = eval(start + 1, end, success);
+      res = eval(start + 1, end, success);
       if (*success) {
-        //printf("[%d %d] %d \n", start, end, res);
         switch (tokens[mainop].type) {
-          case '!': /*printf("%d\n", !res);*/ return !res;
-          case TK_MINUS: /*printf("%d\n", -res);*/ return -res;
-          case TK_POINTER: /*printf("%d\n", res);*/ return isa_vaddr_read(res, 4);
+          case '!': res =  !res; break;
+          case TK_MINUS: res =  -res; break;
+          case TK_POINTER: res =  isa_vaddr_read(res, 4); break;
           default: *success = 0;
         }
+        printf("[%d %d] %d \n", start, end, res);
+        return res;
       }
     } else if (*success) {
-      //printf("[%d %d] %d %d\n", start, end, res1, res2);
       int res1 = eval(start, mainop - 1, success), res2 = eval(mainop + 1, end, success);
       switch (tokens[mainop].type) {
-        case '+': /*printf("%d\n", res1 + res2);*/ return res1 + res2;
-        case '-': /*printf("%d\n", res1 - res2);*/ return res1 - res2;
-        case '*': /*printf("%d\n", res1 * res2);*/ return res1 * res2;
-        case '/': /*printf("%d\n", res1 / res2);*/ return res1 / res2;
-        case '&': /*printf("%d\n", res1 && res2);*/ return res1 && res2;
-        case '|': /*printf("%d\n", res1 || res2);*/ return res1 || res2;
-        case TK_EQ: /*printf("%d\n", res1 == res2);*/ return res1 == res2;
-        case TK_UEQ: /*printf("%d\n", res1 != res2);*/ return res1 != res2;
+        case '+': res = res1 + res2; break;
+        case '-': res = res1 - res2; break;
+        case '*': res = res1 * res2; break;
+        case '/': res = res1 / res2; break;
+        case '&': res = res1 && res2; break;
+        case '|': res = res1 || res2; break;
+        case TK_EQ: res = res1 == res2; break;
+        case TK_UEQ: res = res1 != res2; break;
         default: *success = 0;
       }
+      printf("[%d %d] %d %d\n", start, end, res1, res2);
+      return res;
     }
     return 0;
   }
