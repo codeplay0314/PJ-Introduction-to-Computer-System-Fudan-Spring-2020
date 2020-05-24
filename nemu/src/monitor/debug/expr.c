@@ -73,6 +73,10 @@ static Token tokens[token_capacity] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
+  if (!e) {
+    printf("Please enter an expression.");
+    return false;
+  }
   int position = 0;
   int i;
   regmatch_t pmatch;
@@ -144,7 +148,6 @@ static bool make_token(char *e) {
 //   for (int i = 0; i < nr_token; i++)
 //     printf("%s", tokens[i].str);
 //   putchar('\n');
-  printf("---%d---\n", nr_token);
   if (!nr_token) {
     printf("Please enter an expression.");
     return false;
