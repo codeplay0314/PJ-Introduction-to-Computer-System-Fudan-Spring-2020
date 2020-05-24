@@ -86,10 +86,10 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-        puts("--");
-        for (int cc = 0; cc < substr_len; cc++)
-          putchar(substr_start[cc]);
-        putchar('\n');
+        // puts("--");
+        // for (int cc = 0; cc < substr_len; cc++)
+        //   putchar(substr_start[cc]);
+        // putchar('\n');
         switch (rules[i].token_type) {
           case TK_DEC:
           case TK_HEX:
@@ -116,9 +116,9 @@ static bool make_token(char *e) {
       return false;
     }
   }
-  for (int i = 0; i < nr_token; i++)
-    printf("%s", tokens[i].str);
-  putchar('\n');
+  // for (int i = 0; i < nr_token; i++)
+  //   printf("%s", tokens[i].str);
+  // putchar('\n');
   return true;
 }
 
@@ -144,7 +144,7 @@ bool check_parentheses(int start, int end, bool *success) {
 }
 
 int eval(int start, int end, bool *success) {
-  printf("[%d %d]\n", start, end);
+  //printf("[%d %d]\n", start, end);
   if (start > end) {
     *success = false;
     return 0;
@@ -154,7 +154,7 @@ int eval(int start, int end, bool *success) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-   printf("--%s--\n", tokens[start].str);
+   //printf("--%s--\n", tokens[start].str);
    int res = 0;
    if (tokens[start].type == TK_DEC) sscanf(tokens[start].str, "%d", &res);
    else if (tokens[start].type == TK_HEX) sscanf(tokens[start].str, "%x", &res);
@@ -189,10 +189,10 @@ int eval(int start, int end, bool *success) {
       }
     }
 
-    printf("---%d---\n", mainop);
+    //printf("---%d---\n", mainop);
     int res1 = eval(start, mainop - 1, success), res2 = eval(mainop + 1, end, success);
     if (*success) {
-      printf("[%d %d] %d %d\n", start, end, res1, res2);
+      //printf("[%d %d] %d %d\n", start, end, res1, res2);
       switch (tokens[mainop].type) {
         case '+': printf("%d\n", res1 + res2); return res1 + res2;
         case '-': printf("%d\n", res1 - res2); return res1 - res2;
