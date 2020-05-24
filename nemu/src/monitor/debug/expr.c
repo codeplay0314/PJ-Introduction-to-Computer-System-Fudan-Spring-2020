@@ -166,13 +166,44 @@ int eval(int start, int end, bool *success) {
   }
   else if (start == end) {
     /* Single token.
-     * For now this token should be a number.
+     * For now this token should be a number or register.
      * Return the value of the number.
      */
+
    //printf("--%s--\n", tokens[start].str);
+   const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
+   const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
+   const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
    int res = 0;
    if (tokens[start].type == TK_DEC) sscanf(tokens[start].str, "%d", &res);
    else if (tokens[start].type == TK_HEX) sscanf(tokens[start].str, "%x", &res);
+   else if (tokens[start].type == TK_REG) {
+     bool ok = false;
+     if (!strcmp(tokens[start].str + 1, "pc")) res = isa_vaddr_read(cpu.pc, 8), ok = true;
+     else {
+       for (int i = 0; i < 8; i++) {
+         if (!strcmp(tokens[start].str + 1, regsl[i])) {
+           ok = true;
+           res = reg_l(i);
+           break;
+         }
+         if (!strcmp(tokens[start].str + 1, regsw[i])) {
+           ok = true;
+           res = reg_w(i);
+           break;
+         }
+         if (!strcmp(tokens[start].str + 1, regsb[i])) {
+           ok = true;
+           res = reg_b(i);
+           break;
+         }
+       }
+     }
+     if (!ok) {
+       printf("Please enter valid register name!\n");
+       *success = false;
+     }
+   }
    else *success = false;
    return res;
   }
