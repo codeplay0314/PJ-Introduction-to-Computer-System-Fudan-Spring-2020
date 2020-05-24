@@ -266,12 +266,14 @@ int eval(int start, int end, bool *success) {
       }
     } else if (*success) {
       int res1 = eval(start, mainop - 1, success), res2 = eval(mainop + 1, end, success);
-      if (tokens[mainop].type == '/' && !res2) assert("Error: Division by zero");
       switch (tokens[mainop].type) {
         case '+': res = res1 + res2; break;
         case '-': res = res1 - res2; break;
         case '*': res = res1 * res2; break;
-        case '/': res = res1 / res2; break;
+        case '/':
+          if (!res2) assert("Error: Division by zero");
+          res = res1 / res2;
+          break;
         case '&': res = res1 && res2; break;
         case '|': res = res1 || res2; break;
         case TK_EQ: res = res1 == res2; break;
