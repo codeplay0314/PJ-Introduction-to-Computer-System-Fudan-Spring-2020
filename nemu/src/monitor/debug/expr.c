@@ -200,7 +200,7 @@ int eval(int start, int end, bool *success) {
        }
      }
      if (!ok) {
-       printf("%s is not a valid register name!\n", tokens[start].str + 1);
+       printf("\"%s\" is not a valid register name. ", tokens[start].str + 1);
        *success = false;
      }
    }
