@@ -146,7 +146,7 @@ static bool make_token(char *e) {
 //   putchar('\n');
   if (!nr_token) {
     printf("Please enter an expression");
-    return 0;
+    return false;
   }
   return true;
 }
