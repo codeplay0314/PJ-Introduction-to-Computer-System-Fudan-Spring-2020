@@ -288,7 +288,7 @@ int eval(int start, int end, bool *success) {
         default: *success = 0;
       }
     }
-    //printf("$%d %d %d$\n", start, end, res);
+    printf("$%d %d %d$\n", start, end, res);
     return res;
   }
   return 0;
