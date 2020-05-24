@@ -112,6 +112,8 @@ static bool make_token(char *e) {
       return false;
     }
   }
+  for (int i = 0; i < nr_token; i++)
+    printf("**%d: %s", i, tokens[nr_token++].str);
   return true;
 }
 
@@ -147,7 +149,7 @@ int eval(int start, int end, bool *success) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-   printf("--%s--\n", tokens[start].str); 
+   printf("--%s--\n", tokens[start].str);
    int res = 0;
    if (tokens[start].type == TK_DEC) sscanf(tokens[start].str, "%d", &res);
    else if (tokens[start].type == TK_HEX) sscanf(tokens[start].str, "%x", &res);
