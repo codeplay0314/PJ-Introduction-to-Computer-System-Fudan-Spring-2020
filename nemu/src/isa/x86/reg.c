@@ -56,21 +56,24 @@ void isa_reg_display() {
 uint32_t isa_reg_str2val(const char *s, bool *success) {
   int res = 0;
   bool ok = false;
-  for (int i = 0; i < 8; i++) {
-    if (!strcmp(s, regsl[i])) {
-      ok = true;
-      res = reg_l(i);
-      break;
-    }
-    if (!strcmp(s, regsw[i])) {
-      ok = true;
-      res = reg_w(i);
-      break;
-    }
-    if (!strcmp(s, regsb[i])) {
-      ok = true;
-      res = reg_b(i);
-      break;
+  if (!strcmp(s, "pc")) res = isa_vaddr_read(cpu.pc, 8), ok = true;
+  else {
+    for (int i = 0; i < 8; i++) {
+      if (!strcmp(s, regsl[i])) {
+        ok = true;
+        res = reg_l(i);
+        break;
+      }
+      if (!strcmp(s, regsw[i])) {
+        ok = true;
+        res = reg_w(i);
+        break;
+      }
+      if (!strcmp(s, regsb[i])) {
+        ok = true;
+        res = reg_b(i);
+        break;
+      }
     }
   }
   *success = ok;
