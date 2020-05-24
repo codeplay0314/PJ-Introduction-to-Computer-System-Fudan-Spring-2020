@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
   char buf[256]={0};
   char content[256] = {0};
   uint32_t ans = 0;
-  fp = fopen("/home/codeplay0314/ics2010/nemu/src/psmd.txt", "r");
+  fp = fopen("/home/codeplay0314/ics2020/nemu/src/psmd.txt", "r");
   if(fp == NULL) {puts("No such file as psmd.txt\n");return 1;}
   while(!feof(fp)){
     memset(buf, 0, sizeof(buf));
