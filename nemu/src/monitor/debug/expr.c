@@ -169,7 +169,7 @@ bool check_parentheses(int start, int end, bool *success) {
 }
 
 int eval(int start, int end, bool *success) {
-  printf("[%d %d]\n", start, end);
+  //printf("[%d %d]\n", start, end);
   if (start > end) {
     *success = false;
     return 0;
@@ -180,7 +180,7 @@ int eval(int start, int end, bool *success) {
      * Return the value of the number.
      */
 
-   printf("--%s--\n", tokens[start].str);
+   //printf("--%s--\n", tokens[start].str);
    const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
    const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
    const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
@@ -254,7 +254,7 @@ int eval(int start, int end, bool *success) {
       }
     }
 
-    printf("---%d---\n", mainop);
+    //printf("---%d---\n", mainop);
     int res = 0;
     if (mainop == start) {
       res = eval(start + 1, end, success);
@@ -287,7 +287,7 @@ int eval(int start, int end, bool *success) {
         default: *success = 0;
       }
     }
-    printf("$%d %d %d$\n", start, end, res);
+    //printf("$%d %d %d$\n", start, end, res);
     return res;
   }
   return 0;
