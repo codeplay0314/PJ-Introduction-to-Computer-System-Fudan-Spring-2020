@@ -234,20 +234,23 @@ int eval(int start, int end, bool *success) {
       if (tk == '(') cnt++;
       else if (tk == ')') cnt--;
       else if (!cnt) {
-        if (tk == TK_EQ || tk == TK_UEQ) {
-          mainop = i;
-          break;
-        }
         if (tk == TK_POINTER) continue;
-        else if (tk == '&' || tk == '|') {
-          if (tokens[mainop].type != '&' && tokens[mainop].type != '|') mainop = i;
+        else if (tk == '|') mainop = i;
+        else if (tk == '&') {
+          if (tokens[mainop].type != '|') mainop = i;
+        }
+        else if (tk == TK_EQ || tk == TK_UEQ) {
+            if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
+              tokens[mainop].type != TK_EQ && tokens[mainop].type != TK_UEQ) mainop = i;
         }
         else if (tk == '+' || tk == '-') {
-          if (tokens[mainop].type != '&' && tokens[mainop].type != '|') mainop = i;
+          if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
+            tokens[mainop].type != TK_EQ && tokens[mainop].type != TK_UEQ) mainop = i;
         }
         else if (tk == '*' || tk == '/') {
           if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
-            tokens[mainop].type != '+' && tokens[mainop].type != '-') mainop = i;
+            tokens[mainop].type != TK_EQ && tokens[mainop].type != TK_UEQ && \
+              tokens[mainop].type != '+' && tokens[mainop].type != '-') mainop = i;
         }
       }
     }
