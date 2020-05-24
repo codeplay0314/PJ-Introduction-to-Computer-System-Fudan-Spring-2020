@@ -36,7 +36,7 @@ static struct rule {
   {"!", '!'},                               // not
   {"0x[0-9a-f]+", TK_HEX},                  // hexadecimal number
   {"[0-9]+", TK_DEC},                       // decimal number
-  {"\\$[a-ehilpx]{2,3}", TK_REG},            // register
+  {"\\$[a-z]{2,3}", TK_REG},            // register
   {"\\(", '('},                             // left parenthesis
   {"\\)", ')'}                              // right parenthesis
 };
@@ -200,7 +200,7 @@ int eval(int start, int end, bool *success) {
        }
      }
      if (!ok) {
-       printf("Please enter valid register name!\n");
+       printf("%s is not a valid register name!\n", tokens[start].str + 1);
        *success = false;
      }
    }
