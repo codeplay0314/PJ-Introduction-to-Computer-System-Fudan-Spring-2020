@@ -10,9 +10,9 @@
 enum  TK{
   TK_NOTYPE = 256, TK_EQ = 257,
   /* TODO: Add more token types */
-  TK_UEQ = 258,
+  TK_UEQ = 258, TK_MINUS = 259,
   TK_DEC = 10, TK_HEX = 16,
-  TK_REG = 259, TK_POINTER = 260
+  TK_REG = 260, TK_POINTER = 261
 };
 
 static struct rule {
@@ -100,7 +100,6 @@ static bool make_token(char *e) {
         // putchar('\n');
         switch (rules[i].token_type) {
           case '+':
-          case '-':
           case '/':
           case TK_EQ:
           case TK_UEQ:
@@ -118,14 +117,15 @@ static bool make_token(char *e) {
             strncpy(tokens[nr_token].str, substr_start, substr_len);
             tokens[nr_token++].str[substr_len] = 0;
           }break;
+          case '-':
           case '*': {
             if (nr_token >= token_capacity)
               panic("Too many tokens for the expression!");
             if (!nr_token || (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_HEX \
               && tokens[nr_token - 1].type != TK_REG && tokens[nr_token - 1].type != ')'))
-                tokens[nr_token].type = TK_POINTER;
+                tokens[nr_token].type = rules[i].token_type == '*'? TK_POINTER: TK_MINUS;
             else
-              tokens[nr_token].type = '*';
+              tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start, substr_len);
             tokens[nr_token++].str[substr_len] = 0;
           }break;
@@ -234,18 +234,39 @@ int eval(int start, int end, bool *success) {
       if (tk == '(') cnt++;
       else if (tk == ')') cnt--;
       else if (!cnt) {
-        if (tk == TK_EQ) {
+        if (tk == TK_EQ || tk == TK_UEQ) {
           mainop = i;
           break;
         }
-        else if (tk == '+' || tk == '-') mainop = i;
+        if (tk == TK_POINTER) continue;
+        else if (tk == '&' || tk == '|') {
+          if (tokens[mainop].type != '&' && tokens[mainop].type != '|') mainop = i;
+        }
+        else if (tk == '+' || tk == '-') {
+          if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
+            tokens[mainop].type != '+' && tokens[mainop].type != '-') mainop = i;
+        }
         else if (tk == '*' || tk == '/') {
-          if (tokens[mainop].type != '+' && tokens[mainop].type != '-') mainop = i;
+          if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
+            tokens[mainop].type != '+' && tokens[mainop].type != '-' && \
+              tokens[mainop].type != '*' && tokens[mainop].type != '/') mainop = i;
         }
       }
     }
 
     //printf("---%d---\n", mainop);
+    if (mainop == start) {
+      int res = eval(start + 1, end, success);
+      if (*success) {
+        //printf("[%d %d] %d \n", start, end, res);
+        switch (tokens[mainop].type) {
+          case '!': /*printf("%d\n", !res);*/ return !res;
+          case TK_MINUS: /*printf("%d\n", -res);*/ return -res;
+          case TK_POINTER: /*printf("%d\n", res);*/ return isa_vaddr_read(cpu.pc, 8);
+          default: *success = 0;
+        }
+      }
+    }
     int res1 = eval(start, mainop - 1, success), res2 = eval(mainop + 1, end, success);
     if (*success) {
       //printf("[%d %d] %d %d\n", start, end, res1, res2);
