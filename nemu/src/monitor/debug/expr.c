@@ -101,7 +101,8 @@ static bool make_token(char *e) {
           case ')':
           case TK_EQ: {
             tokens[nr_token].type = rules[i].token_type;
-            strncpy(tokens[nr_token++].str, substr_start, substr_len);
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
+            nr_token++;
           }break;
           case TK_NOTYPE: break;
           default: return false;
