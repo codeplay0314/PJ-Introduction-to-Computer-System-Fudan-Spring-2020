@@ -75,19 +75,3 @@ void delete_all_wp() {
   }
   return;
 }
-
-int check_wp() {
-  int flag = 0;
-  for (WP* now_wp = head;now_wp !=  NULL;now_wp = now_wp->next) {
-    bool *success;
-    success = (bool *)malloc(sizeof(bool));
-    uint32_t now_val = expr(now_wp->msg, success);
-    if (*success) {
-      if (now_wp->val != now_val) {
-        now_wp->changed = 1;now_wp->cval = now_val;
-        flag = 1;
-      }
-    }else {Log("strange expr in check_wp.");}
-  }
-  return flag;
-}
