@@ -194,11 +194,11 @@ int eval(int start, int end, bool *success) {
     if (*success) {
       //printf("[%d %d] %d %d\n", start, end, res1, res2);
       switch (tokens[mainop].type) {
-        case '+': printf("%d\n", res1 + res2); return res1 + res2;
-        case '-': printf("%d\n", res1 - res2); return res1 - res2;
-        case '*': printf("%d\n", res1 * res2); return res1 * res2;
-        case '/': printf("%d\n", res1 / res2); return res1 / res2;
-        case TK_EQ: printf("%d\n", res1 == res2); return res1 == res2;
+        case '+': /*printf("%d\n", res1 + res2);*/ return res1 + res2;
+        case '-': /*printf("%d\n", res1 - res2);*/ return res1 - res2;
+        case '*': /*printf("%d\n", res1 * res2);*/ return res1 * res2;
+        case '/': /*printf("%d\n", res1 / res2);*/ return res1 / res2;
+        case TK_EQ: /*printf("%d\n", res1 == res2);*/ return res1 == res2;
         default: *success = 0;
       }
     }
