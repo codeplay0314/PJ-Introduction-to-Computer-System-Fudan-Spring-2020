@@ -26,12 +26,12 @@ int main(int argc, char *argv[]) {
   while(!feof(fp)){
     memset(buf, 0, sizeof(buf));
     char * read = fgets(buf, sizeof(buf)-1, fp); // read a line
-    printf("read info: %s\n", read);
     sscanf(buf, "%u%[^\n]", &ans, content);
     uint32_t res = expr(content, &success);
-    printf("testing expr: %s, answer: %u, your result: %u\n\n", content, ans, res);
-    printf("--------------------------------------------------------------\n\n");
     if(res != ans){
+      printf("testing expr: %s, answer: %u, your result: %u\n\n", content, ans, res);
+      printf("--------------------------------------------------------------\n\n");
+      printf("read info: %s\n", read);
       printf("error when testing expr: %s, answer is %u, your result is %u\n", content, ans, res);
       return 1;
     }
