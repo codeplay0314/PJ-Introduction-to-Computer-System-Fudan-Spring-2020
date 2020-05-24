@@ -240,8 +240,7 @@ int eval(int start, int end, bool *success) {
           if (tokens[mainop].type != '|') mainop = i;
         }
         else if (tk == TK_EQ || tk == TK_UEQ) {
-            if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
-              tokens[mainop].type != TK_EQ && tokens[mainop].type != TK_UEQ) mainop = i;
+            if (tokens[mainop].type != '&' && tokens[mainop].type != '|') mainop = i;
         }
         else if (tk == '+' || tk == '-') {
           if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
