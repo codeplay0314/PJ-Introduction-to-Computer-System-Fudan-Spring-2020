@@ -86,10 +86,10 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-        printf("--");
+        puts("--");
         for (int cc = 0; cc < substr_len; cc++)
           putchar(substr_start[cc]);
-        putchar('\n');
+         puts("--");
         switch (rules[i].token_type) {
           case TK_DEC:
           case TK_HEX:
@@ -102,7 +102,7 @@ static bool make_token(char *e) {
           case TK_EQ: {
             tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start, substr_len);
-            nr_token++;
+            tokens[nr_token++].str[substr_len] = 0;
           }break;
           case TK_NOTYPE: break;
           default: return false;
