@@ -6,10 +6,28 @@
 #include <string.h>
 
 // this should be enough
-static char buf[65536];
-static inline void gen_rand_expr() {
-  buf[0] = '\0';
+static char buf[65536]="";
+
+// TODO: implement these functions: choose, gen_rand_op, gen_num, gen_rand_expr
+static inline uint32_t choose(uint32_t n) {
+  return 0;
 }
+
+static inline void gen_rand_op(){
+  return;
+}
+
+static inline void gen_num(){
+  return;
+}
+
+static inline void gen_rand_expr() {
+  buf[0] = 50;
+  buf[1] = '\0';
+	return;
+}
+// TODO: if necessary, try to re-implement main function for better generation of expression
+
 
 static char code_buf[65536];
 static char *code_format =
@@ -28,9 +46,9 @@ int main(int argc, char *argv[]) {
     sscanf(argv[1], "%d", &loop);
   }
   int i;
-  for (i = 0; i < loop; i ++) {
-    gen_rand_expr();
-
+  for (i = 0;  i < loop; i ++) {
+    buf[0]='\0';
+	  gen_rand_expr();
     sprintf(code_buf, code_format, buf);
 
     FILE *fp = fopen("/tmp/.code.c", "w");
@@ -52,3 +70,5 @@ int main(int argc, char *argv[]) {
   }
   return 0;
 }
+
+
