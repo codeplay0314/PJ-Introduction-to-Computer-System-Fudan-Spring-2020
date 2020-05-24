@@ -69,8 +69,8 @@ static struct {
   { "echo", "Print the characters given by user", cmd_echo }, // add by wuran
   { "pwd", "Print current work path", cmd_pwd }, // add by wuran
   { "ls", "List all files in give path", cmd_ls },
-  { "w", "add a new watchpoint", cmd_w },
-  { "d", "delete a watchpoint or all watchpoints", cmd_d },
+  { "w", "Add a new watchpoint", cmd_w },
+  { "d", "Delete a watchpoint or all watchpoints", cmd_d },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0])) // number of commands
@@ -256,14 +256,7 @@ void ui_mainloop(int is_batch_mode) {
 }
 
 static int cmd_w(char *args) {
-  char *arg = strtok(NULL, " ");
-
-	if(arg == NULL) {
-	  printf("Please enter an expression after \"w\"\n");
-	  return 0;
-	}
-
-  bool success;
+  bool success = true;
   int val = expr(args, &success);
 	if (success) new_wp(args, val);
   Log("Successfully create watchpoint %s.", args);
