@@ -86,7 +86,10 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+        puts("--");
+        for (int cc = 0; cc < substr_len; cc++)
+          putchar(substr_start[cc]);
+         puts("--");
         switch (rules[i].token_type) {
           case TK_DEC:
           case TK_HEX:
