@@ -10,8 +10,9 @@
 enum  TK{
   TK_NOTYPE = 256, TK_EQ = 257,
   /* TODO: Add more token types */
-  TK_UEQ = 258, TK_REG = 255,
-  TK_DEC = 10, TK_HEX = 16
+  TK_UEQ = 258,
+  TK_DEC = 10, TK_HEX = 16,
+  TK_REG = 259, TK_POINTER = 260
 };
 
 static struct rule {
@@ -23,20 +24,21 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},          // spaces
-  {"\\+", '+'},               // plus
-  {"\\-", '-'},               // minus
-  {"\\*", '*'},               // mutiply
-  {"\\/", '/'},               // devide
-  {"==", TK_EQ},              // equal
-  {"!=", TK_UEQ},             // unequal
-  {"&&", '&'},                // and
-  {"\\|\\|", '|'},            // or
-  {"!", '!'},                 // not
-  {"0x[0-9a-f]+", TK_HEX},    // hexadecimal number
-  {"[0-9]+", TK_DEC},         // decimal number
-  {"\\(", '('},               // left parenthesis
-  {"\\)", ')'}                // right parenthesis
+  {" +", TK_NOTYPE},                        // spaces
+  {"\\+", '+'},                             // plus
+  {"\\-", '-'},                             // minus
+  {"\\*", '*'},                             // mutiply
+  {"\\/", '/'},                             // devide
+  {"==", TK_EQ},                            // equal
+  {"!=", TK_UEQ},                           // unequal
+  {"&&", '&'},                              // and
+  {"\\|\\|", '|'},                          // or
+  {"!", '!'},                               // not
+  {"0x[0-9a-f]+", TK_HEX},                  // hexadecimal number
+  {"[0-9]+", TK_DEC},                       // decimal number
+  {"\\$[aehilpx]{2,3}", TK_REG},            // register
+  {"\\(", '('},                             // left parenthesis
+  {"\\)", ')'}                              // right parenthesis
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -97,15 +99,20 @@ static bool make_token(char *e) {
         //   putchar(substr_start[cc]);
         // putchar('\n');
         switch (rules[i].token_type) {
-          case TK_DEC:
-          case TK_HEX:
           case '+':
           case '-':
           case '*':
           case '/':
+          case TK_EQ:
+          case TK_UEQ:
+          case '&':
+          case '|':
+          case '!':
+          case TK_DEC:
+          case TK_HEX:
+          case TK_REG:
           case '(':
-          case ')':
-          case TK_EQ: {
+          case ')': {
             if (nr_token >= token_capacity)
               panic("Too many tokens for the expression!");
             tokens[nr_token].type = rules[i].token_type;
