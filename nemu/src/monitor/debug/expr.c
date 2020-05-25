@@ -98,10 +98,10 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-//         puts("--");
-//         for (int cc = 0; cc < substr_len; cc++)
-//           putchar(substr_start[cc]);
-//         putchar('\n');
+         puts("--");
+         for (int cc = 0; cc < substr_len; cc++)
+           putchar(substr_start[cc]);
+         putchar('\n');
         switch (rules[i].token_type) {
           case '+':
           case '/':
@@ -145,9 +145,9 @@ static bool make_token(char *e) {
       return false;
     }
   }
-   for (int i = 0; i < nr_token; i++)
-     printf("%s", tokens[i].str);
-   putchar('\n');
+//   for (int i = 0; i < nr_token; i++)
+//     printf("%s", tokens[i].str);
+//   putchar('\n');
   if (!nr_token) {
     printf("Please enter an expression.\n");
     return false;
