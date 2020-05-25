@@ -4,7 +4,7 @@
 #define NR_WP 32
 
 static WP wp_pool[NR_WP] = {};
-static uint32_t wp_num;
+static uint32_t wp_num = 0;
 
 // TODO: try to re-organize, you can abort head and free_ pointer while just use static int index
 static WP *head, *free_ = NULL;
@@ -44,6 +44,7 @@ void free_wp(int no) {
       else pre->next = wp->next;
       wp->next = free_;
       free_ = wp;
+      printf("Delete watchpoint %d\n", no);
       return;
     }
     pre = wp, wp = wp->next;
