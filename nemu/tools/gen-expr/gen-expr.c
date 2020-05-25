@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
 
     int result;
-    fscanf(fp, "%d", &result);
+    if (!~fscanf(fp, "%d", &result)) continue;
     pclose(fp);
 
     printf("%u %s\n", result, buf);
