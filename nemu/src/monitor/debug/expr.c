@@ -178,6 +178,7 @@ bool check_parentheses(int start, int end, bool *success) {
 
 int eval(int start, int end, bool *success) {
   printf("[%d %d]\n", start, end);
+    puts("$$$$$$$");
   if (start > end) {
     *success = false;
     return 0;
@@ -231,7 +232,6 @@ int eval(int start, int end, bool *success) {
      * '('<expr>')' = <expr>
      */
 
-    puts("$$$$$$$");
     return eval(start + 1, end - 1, success);
   }
   else if (*success) {
