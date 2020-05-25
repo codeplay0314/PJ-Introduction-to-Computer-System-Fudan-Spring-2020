@@ -14,8 +14,9 @@ static inline uint32_t choose(uint32_t n) {
   return 0;
 }
 
+int module;
 static inline int gen_rand_op(int cur){
-  switch(choose(8)) {
+  switch(module? choose(8): choose(4)) {
   case 0: buf[cur++] = '+'; return cur;
   case 1: buf[cur++] = '-'; return cur;
   case 2: buf[cur++] = '*'; return cur;
@@ -28,58 +29,48 @@ static inline int gen_rand_op(int cur){
 }
 
 static inline int gen_num(){
-  return ((rand() & 1)? 1: -1) * rand() % 1000;
+  return rand() % 1000;
 }
 
 static inline int gen_rand_expr(int cur, int t) {
   if (t <= 0) return cur;
-  if (t == 1)  {
+  if (t <= 2)  {
     sprintf(buf + cur, "%d%c", gen_num(), 0); // 生成随机数字
     return strlen(buf); // 数字是表达式
   }
-  if (t == 2) {
-    // switch(choose(2)) {
-    // case 0: buf[cur++] = '-';
-    // case 1: buf[cur++] = '!';
-    // }
-    buf[cur++] = '!';
-    gen_rand_expr(cur, t - 1); // 空格/'-' + 表达式是表达式
-    return strlen(buf);
-  }
   while (1) {
-    switch(choose(5)){ // choose(num)表达式随机取一个数字对num取模
-      case 0:
-        buf[cur++] = ' ';
-        gen_rand_expr(cur, t); // 空格/'-' + 表达式是表达式
-        break;
-      case 1:
-        sprintf(buf + cur, "%d%c", gen_num(), 0); // 生成随机数字
-        break; // 数字是表达式
-      case 2:
-        if (t < 3) continue;
-        int lef = choose(t - 2) + 1;
-        cur = gen_rand_expr(cur, lef);
-        cur = gen_rand_op(cur); // 产生随机操作符
-        cur = gen_rand_expr(cur, t - lef - 1); // <expr> "op" <expr>是表达式
-        break;
-      case 3:
-        buf[cur++] = '(';
-        cur = gen_rand_expr(cur, t - 2);
-        buf[cur++] = ')'; // "(" <expr> ")"也是表达式
-        buf[cur++] = '\0';
-        break;
-      case 4:
-        // switch(choose(2)) {
-        // case 0: buf[cur++] = '-';
-        // case 1: buf[cur++] = '!';
-        // }
-        buf[cur++] = '!';
-        gen_rand_expr(cur, t - 1); // 空格/'-' + 表达式是表达式
-        break;
+    switch(choose(11)){ // choose(num)表达式随机取一个数字对num取模
+    case 0:
+      buf[cur++] = ' ';
+      gen_rand_expr(cur, t); // 空格/'-' + 表达式是表达式
+      break;
+    case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
+      ;int lef = choose(t - 2) + 1;
+      cur = gen_rand_expr(cur, lef);
+      cur = gen_rand_op(cur); // 产生随机操作符
+      cur = gen_rand_expr(cur, t - lef - 1); // <expr> "op" <expr>是表达式
+      break;
+    case 9:
+      buf[cur++] = '(';
+      cur = gen_rand_expr(cur, t - 2);
+      buf[cur++] = ')'; // "(" <expr> ")"也是表达式
+      buf[cur++] = '\0';
+      break;
+    case 10:
+      if (t < 4) continue;
+      buf[cur++] = '(';
+      switch(choose(2)) {
+      case 0: buf[cur++] = '-';
+      case 1: buf[cur++] = '!';
+      }
+      cur = gen_rand_expr(cur, t - 3);
+      buf[cur++] = ')'; // "(" <expr> ")"也是表达式
+      buf[cur++] = '\0';
+      break;
     }
     break;
   }
-	return strlen(buf);
+  return strlen(buf);
 }
 // TODO: if necessary, try to re-implement main function for better generation of expression
 
@@ -106,7 +97,7 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0;  i < loop; i ++) {
-    printf("%d\n", seed);
+    module = i & 1;
     buf[0]='\0';
 	  gen_rand_expr(0, limit);
     sprintf(code_buf, code_format, buf);
