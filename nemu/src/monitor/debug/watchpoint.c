@@ -60,8 +60,8 @@ void print_wp() {
   int cnt = 0;
   WP* wp_write[NR_WP], * wp = head;
   while (wp) {
-    wp_write[cnt++] = head;
-    head = head->next;
+    wp_write[cnt++] = wp;
+    wp = wp->next;
   }
   if (!cnt)
     printf("No watchpoints\n");
