@@ -27,14 +27,11 @@ void new_wp(char* msg, int val) {
     printf("Failed! Too many watchpoint.\n");
     return;
   }
-  printf("%p %p %p %p\n", head, free_, head? head->next: NULL, free_? free_->next: NULL);
   WP* wp = free_;
   free_ = free_->next;
   wp->NO = ++wp_num, wp->val = val, wp->next = head;
   strcpy(wp->msg, msg);
   head = wp;
-  printf("%p %p %p %p", head, free_, head? head->next: NULL, free_? free_->next: NULL);
-  printf("\n-------\n");
   printf("Watchpoint %d\texpr: %s val: 0x%x\n", wp->NO, wp->msg, wp->val);
   return;
 }
