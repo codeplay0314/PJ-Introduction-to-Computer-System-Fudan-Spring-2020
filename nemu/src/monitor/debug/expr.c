@@ -177,7 +177,7 @@ bool check_parentheses(int start, int end, bool *success) {
 }
 
 int eval(int start, int end, bool *success) {
-//  printf("[%d %d] %d\n", start, end, *success);
+  printf("[%d %d] %d\n", start, end, *success);
   if (start > end) {
     *success = false;
     return 0;
@@ -262,7 +262,7 @@ int eval(int start, int end, bool *success) {
       }
     }
 
-//    printf("---%d---\n", mainop);
+    printf("---%d---\n", mainop);
     int res = 0;
     if (mainop == start) {
       res = eval(start + 1, end, success);
@@ -295,7 +295,7 @@ int eval(int start, int end, bool *success) {
         default: *success = 0;
       }
     }
-//    printf("$%d %d %d$\n", start, end, res);
+    printf("$%d %d %d$\n", start, end, res);
     return res;
   }
   return 0;
