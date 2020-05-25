@@ -231,11 +231,11 @@ int eval(int start, int end, bool *success) {
      * '('<expr>')' = <expr>
      */
 
+    puts("$$$$$$$");
     return eval(start + 1, end - 1, success);
   }
   else if (*success) {
     /* We should do more things here. */
-    puts("$$$$$$$");
     int mainop = start;
     int i, cnt;
     for (i = start, cnt = 0; i <= end; i++) {
