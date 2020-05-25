@@ -90,8 +90,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+//        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+//            i, rules[i].regex, position, substr_len, substr_len, substr_start);
         position += substr_len;
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -235,6 +235,7 @@ int eval(int start, int end, bool *success) {
   }
   else if (*success) {
     /* We should do more things here. */
+    puts("$$$$$$$");
     int mainop = start;
     int i, cnt;
     for (i = start, cnt = 0; i <= end; i++) {
