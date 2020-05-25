@@ -282,6 +282,7 @@ int eval(int start, int end, bool *success) {
         case '*': res = res1 * res2; break;
         case '/':
           if (res2 == 0) {
+            printf("/%d %d/ %d\n", start, end, res1);
             printf("Error: Division by zero. ");
             *success = false;
             return 0;
