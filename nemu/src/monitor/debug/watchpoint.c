@@ -27,6 +27,7 @@ void new_wp(char* msg, int val) {
     printf("Failed! Too many watchpoint.\n");
     return;
   }
+  printf("%p %p %p %p", head, free_, head? head->next: NULL, free_? free_->next: NULL);
   WP* wp = free_;
   wp->NO = ++wp_num, wp->val = val, wp->next = head;
   strcpy(wp->msg, msg);
