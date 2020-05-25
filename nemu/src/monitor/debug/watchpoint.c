@@ -1,77 +1,77 @@
-#include "nemu.h"
-#include "monitor/expr.h"
 #include "monitor/watchpoint.h"
+#include "monitor/expr.h"
 
 #define NR_WP 32
 
 static WP wp_pool[NR_WP] = {};
+static uint32_t wp_num;
 
 // TODO: try to re-organize, you can abort head and free_ pointer while just use static int index
 static WP *head, *free_ = NULL;
 
 void init_wp_pool() {
   int i;
-  for (i = 0; i < NR_WP; i ++) {
-    wp_pool[i].NO = i+1;
+  wp_num = 0;
+  for (i = 0; i < NR_WP - 1; i++) {
     wp_pool[i].next = &wp_pool[i + 1];
-    wp_pool[i].is_free = 1;
-    wp_pool[i].changed = wp_pool[i].cval = 0;
   }
   wp_pool[NR_WP - 1].next = NULL;
-
   head = NULL;
   free_ = wp_pool;
 }
 
 /* TODO: Implement the functionality of watchpoint */
-WP *new_wp(char *msg, int val) {
-  WP* newfree;
-  newfree = (WP*)malloc(sizeof(WP));
-  newfree = free_->next;
-
-  strcpy(free_->msg, msg);
-  free_->val = val; free_->next = head;
-  free_->is_free = 0;free_->changed = 0;free_->cval = 0;
-  head = free_;free_ = newfree;
-
-  printf("Successfully create watchpoint %s.\n", msg);
-  return free_;
+void new_wp(char* msg, int val) {
+  if (free_ == NULL) {
+    printf("Failed! Too many watchpoint.\n");
+    return;
+  }
+  WP* wp = free_;
+  wp->NO = ++wp_num, wp->val = val, wp->next = head;
+  strcpy(wp->msg, msg);
+  head = wp;
+  free_ = free_->next;
+  printf("Watchpoint %d\texpr: %s val: 0x%x\n", wp->NO, wp->msg, wp->val);
+  return;
 }
 
 void free_wp(int no) {
-  WP* pre_wp;
-  pre_wp = NULL;
-
-  for (WP* now_wp = head;now_wp !=  NULL;now_wp = now_wp->next) {
-    if (now_wp->NO == no) {
-
-      if (pre_wp == NULL) {
-        head = now_wp->next;
-      }
-      else {
-        pre_wp->next = now_wp->next;
-      }
-      now_wp->is_free = 1;
-      now_wp->next = NULL;
-      Log("free watchpoint succeed.");
-      break;
+  WP* wp = head, * pre = NULL;
+  while (wp) {
+    if (wp->NO == no) {
+      if (pre == NULL) head = head->next;
+      else pre->next = wp->next;
+      wp->next = free_;
+      free_ = wp;
+      return;
     }
-    pre_wp = now_wp;
+    pre = wp, wp = wp->next;
   }
-
+  printf("No such watchpoint, numbered as %d\n", no);
   return;
 }
 
 void print_wp() {
-  for (WP* now_wp = head;now_wp !=  NULL;now_wp = now_wp->next) {
-    printf("watchpoint %d: msg:%s val:%d\n", now_wp->NO, now_wp->msg, now_wp->val);
+  int cnt = 0;
+  WP* wp_write[NR_WP], * wp = head;
+  while (wp) {
+    wp_write[cnt++] = head;
+    head = head->next;
   }
+  if (!cnt)
+    printf("No watchpoints\n");
+  for (int i = cnt - 1; i >= 0; i--)
+    printf("%d\t\twatchpoint\t\texpr: %s val: 0x%x\n", wp_write[i]->NO, wp_write[i]->msg, wp_write[i]->val);
   return;
 }
 
 void delete_all_wp() {
-  for (WP* now_wp = head;now_wp !=  NULL;now_wp = now_wp->next) {
-    free_wp(now_wp->NO);
+  if (free_)  {
+    while (free_->next) free_ = free_->next;
+    free_->next = head, head = NULL;
   }
+  else
+    free_ = head, head = NULL;
+  printf("All watchpoints cleared\n");
   return;
 }
