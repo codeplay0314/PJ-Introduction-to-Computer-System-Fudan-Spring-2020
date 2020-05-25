@@ -27,7 +27,6 @@ int main(int argc, char *argv[]) {
     memset(buf, 0, sizeof(buf));
     char * read = fgets(buf, sizeof(buf)-1, fp); // read a line
     sscanf(buf, "%u%[^\n]", &ans, content);
-    success = true;
     uint32_t res = expr(content, &success);
     if(res != ans){
       printf("testing expr: %s, answer: %u, your result: %u\n\n", content, ans, res);
