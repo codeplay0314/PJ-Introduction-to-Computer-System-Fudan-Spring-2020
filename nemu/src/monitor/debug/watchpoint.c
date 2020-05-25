@@ -22,6 +22,7 @@ void init_wp_pool() {
 
 /* TODO: Implement the functionality of watchpoint */
 void new_wp(char* msg, int val) {
+  if (!wp_num) init_wp_pool();
   if (free_ == NULL) {
     printf("Failed! Too many watchpoint.\n");
     return;
