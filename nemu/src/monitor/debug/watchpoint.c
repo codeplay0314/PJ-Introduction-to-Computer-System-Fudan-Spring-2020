@@ -66,7 +66,7 @@ void print_wp() {
   if (!cnt)
     printf("No watchpoints\n");
   for (int i = cnt - 1; i >= 0; i--)
-    printf("%d\t\twatchpoint\t\texpr: %s val: 0x%x\n", wp_write[i]->NO, wp_write[i]->msg, wp_write[i]->val);
+    printf("%d\twatchpoint\texpr: %s val: 0x%x\n", wp_write[i]->NO, wp_write[i]->msg, wp_write[i]->val);
   return;
 }
 
