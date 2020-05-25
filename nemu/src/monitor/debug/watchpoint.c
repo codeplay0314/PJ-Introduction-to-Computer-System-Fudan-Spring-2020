@@ -32,7 +32,7 @@ void new_wp(char* msg, int val) {
   strcpy(wp->msg, msg);
   head = wp;
   free_ = free_->next;
-  printf("%p %p %p %p", head, free_, head->next, free_->next);
+  printf("%p %p %p %p", head, free_, head? head->next: NULL, free_? free_->next: NULL);
   printf("\n-------\n");
   printf("Watchpoint %d\texpr: %s val: 0x%x\n", wp->NO, wp->msg, wp->val);
   return;
