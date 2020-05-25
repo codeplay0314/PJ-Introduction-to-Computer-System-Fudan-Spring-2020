@@ -302,14 +302,16 @@ int eval(int start, int end, bool *success) {
 }
 
 uint32_t expr(char *e, bool *success) {
+  printf("=== %d ===\n", *success);
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  int res = eval(0, nr_token - 1, success);
   if (*success == false)
     printf("Please enter valid expression\n");
-  return res;
+  else
+   return eval(0, nr_token - 1, success);
+  return 0;
 }
