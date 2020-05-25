@@ -80,3 +80,27 @@ void delete_all_wp() {
   printf("All watchpoints cleared\n");
   return;
 }
+
+static bool changed(WP* wp) {
+  bool success = true;
+  uint32_t val = expr(wp->msg, &success);
+  if (val == wp->val) return false;
+  wp->val = val;
+  return true;
+}
+
+bool check_all_wp() {
+  int cnt = 0;
+  WP* wp_write[NR_WP], * wp = head;
+  uint32_t old_val[NR_WP];
+  while (wp) {
+    old_val[cnt] = wp->val;
+    if (changed(wp))
+      wp_write[cnt++] = wp;
+    wp = wp->next;
+  }
+  if (!cnt) return false;
+  for (int i = cnt - 1; i >= 0; i--)
+    printf("Watchpoint %d: %s\n\nOld value = 0x%x\nNew value = 0x%x\n", wp_write[i]->NO, wp_write[i]->msg, old_val[i], wp_write[i]->val);
+  return true;
+}
