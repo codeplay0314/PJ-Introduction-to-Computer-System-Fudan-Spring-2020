@@ -26,7 +26,7 @@ static inline void rtl_sr(int r, const rtlreg_t* src1, int width) {
 static inline void rtl_push(const rtlreg_t* src1) {
   // esp <- esp - 4
   // M[esp] <- src1
-  rtl_si(&cpu.esp, &cpu.esp, 4);
+  cpu.esp -= 4;
   rtl_sm(&cpu.esp, src1, 4);
 }
 
@@ -34,7 +34,7 @@ static inline void rtl_pop(rtlreg_t* dest) {
   // dest <- M[esp]
   // esp <- esp + 4
   rtl_lm(dest, &cpu.esp, 4);
-  rtl_ai(&cpu.esp, &cpu.esp, 4);
+  cpu.esp += 4;
 }
 
 static inline void rtl_is_sub_overflow(rtlreg_t* dest,

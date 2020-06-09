@@ -129,15 +129,6 @@ void interpret_rtl_exit(int state, vaddr_t halt_pc, uint32_t halt_ret);
 
 
 /* RTL pseudo instructions */
-
-static inline void rtl_si(rtlreg_t* dest, const rtlreg_t *src1, uint32_t imm) {
-  *dest = *(src1 - imm);
-}
-
-static inline void rtl_ai(rtlreg_t* dest, const rtlreg_t *src1, uint32_t imm) {
-  *dest = *(src1 + imm);
-}
-
 static inline void rtl_not(rtlreg_t *dest, const rtlreg_t* src1) {
   // dest <- ~src1
   *dest = ~*src1;
