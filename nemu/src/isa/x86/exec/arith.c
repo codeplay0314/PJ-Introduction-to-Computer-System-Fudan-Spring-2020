@@ -10,6 +10,7 @@ make_EHelper(sub) {
   rtl_sub(&s0, &id_dest->val, &id_src->val);
   rtl_setrelop(RELOP_LTU, &s1, &id_dest->val, &s0);
   operand_write(id_dest, &s0);
+
   rtl_update_ZFSF(&s0, id_dest->width);
 
   rtl_setrelop(RELOP_LTU, &t0, &id_dest->val, &s0);
