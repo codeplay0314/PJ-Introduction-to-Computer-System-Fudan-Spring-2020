@@ -40,7 +40,8 @@ static inline void rtl_pop(rtlreg_t* dest) {
 static inline void rtl_is_sub_overflow(rtlreg_t* dest,
     const rtlreg_t* res, const rtlreg_t* src1, const rtlreg_t* src2, int width) {
   // dest <- is_overflow(src1 - src2)
-  TODO();
+  *dest = *src1 - *src2;
+  *dest = (((*src1 < 0) ^ (*src2 < 0)) && ((*src1 < 0) ^ (*dest < 0))) || (!*src1 && *src2 && *src2 == -*src2 + 1);
 }
 
 static inline void rtl_is_sub_carry(rtlreg_t* dest,
@@ -52,7 +53,8 @@ static inline void rtl_is_sub_carry(rtlreg_t* dest,
 static inline void rtl_is_add_overflow(rtlreg_t* dest,
     const rtlreg_t* res, const rtlreg_t* src1, const rtlreg_t* src2, int width) {
   // dest <- is_overflow(src1 + src2)
-  TODO();
+  *dest = *src1 + *src2;
+  *dest = (*src1 < 0 && *src2 < 0 && *dest > *src1) || (*src1 > 0 && *src2 > 0 && *dest < *src1);
 }
 
 static inline void rtl_is_add_carry(rtlreg_t* dest,
