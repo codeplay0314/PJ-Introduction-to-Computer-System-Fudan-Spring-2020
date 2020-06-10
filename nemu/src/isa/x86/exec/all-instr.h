@@ -16,3 +16,4 @@ make_EHelper(pop);
 make_EHelper(ret);
 make_EHelper(lea);
 make_EHelper(and);
+make_EHelper(nop);
