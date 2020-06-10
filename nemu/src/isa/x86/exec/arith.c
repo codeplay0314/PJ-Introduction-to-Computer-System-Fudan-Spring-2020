@@ -1,13 +1,7 @@
 #include "cpu/exec.h"
 
 make_EHelper(add) {
-  rtl_and(&s1, &id_dest->val, &id_src->val);
-  operand_write(id_dest, &s1);
-
-  rtl_update_ZFSF(&s0, id_dest->width);
-  s0 = 0;
-  rtl_set_OF(&s0);
-  rtl_set_CF(&s0);
+  TODO();
 
   print_asm_template2(add);
 }
