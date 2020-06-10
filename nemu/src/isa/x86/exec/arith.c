@@ -7,7 +7,20 @@ make_EHelper(add) {
 }
 
 make_EHelper(sub) {
-  TODO();
+  rtl_sub(&s0, &id_dest->val, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &s1, &id_dest->val, &s0);
+  operand_write(id_dest, &s0);
+  rtl_update_ZFSF(&s0, id_dest->width);
+
+  rtl_setrelop(RELOP_LTU, &t0, &id_dest->val, &s0);
+  rtl_or(&t0, &s1, &t0);
+  rtl_set_CF(&t0);
+
+  rtl_xor(&t0, &id_dest->val, &id_src->val);
+  rtl_xor(&t1, &id_dest->val, &s0);
+  rtl_and(&t0, &t0, &t1);
+  rtl_msb(&t0, &t0, id_dest->width);
+  rtl_set_OF(&t0);
 
   print_asm_template2(sub);
 }
