@@ -262,7 +262,6 @@ make_DHelper(J) {
   decode_op_SI(pc, id_dest, false);
   // the target address can be computed in the decode stage
   decinfo.jmp_pc = id_dest->simm + *pc;
-  printf("---0x%x---\n", decinfo.jmp_pc);
 }
 
 make_DHelper(push_SI) {
