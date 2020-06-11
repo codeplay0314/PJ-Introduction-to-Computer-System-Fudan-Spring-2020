@@ -49,7 +49,7 @@ void cpu_exec(uint64_t n) {
   difftest_step(ori_pc, cpu.pc);
 #endif
 
-    printf("[%d]\n", nemu_state.state == NEMU_RUNNING);
+    printf("[%d]\n", nemu_state.state == NEMU_ABORT);
 #ifdef DEBUG
   if (g_nr_guest_instr < LOG_MAX) {
     asm_print(ori_pc, seq_pc - ori_pc, n < MAX_INSTR_TO_PRINT);
