@@ -43,7 +43,7 @@ void reg_test() {
 void isa_reg_display() {
   /*TODO please print information of registers
   */
-	printf("%%eax\t0x%x\n", reg_l(0));
+  printf("%%eax\t0x%x\n", reg_l(0));
   printf("%%ecx\t0x%x\n", reg_l(1));
   printf("%%edx\t0x%x\n", reg_l(2));
   printf("%%ebx\t0x%x\n", reg_l(3));
