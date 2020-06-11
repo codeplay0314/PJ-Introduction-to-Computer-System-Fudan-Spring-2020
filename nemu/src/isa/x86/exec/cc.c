@@ -34,7 +34,7 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
     case CC_L:
       rtl_get_SF(&t0);
       rtl_get_OF(&t1);
-      rtl_or(dest, &t0, &t1);
+      rtl_xor(dest, &t0, &t1);
       break;
     case CC_LE:{
       rtl_li(dest, ((cpu.eflags.ZF) || (cpu.eflags.SF != cpu.eflags.OF)));
