@@ -20,3 +20,4 @@ make_EHelper(nop);
 make_EHelper(add);
 make_EHelper(not);
 make_EHelper(cmp);
+make_EHelper(setcc);
