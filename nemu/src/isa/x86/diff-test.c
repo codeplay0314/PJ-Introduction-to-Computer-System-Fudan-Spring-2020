@@ -10,9 +10,9 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   }
   if (reg_flags != ref_r->eflags.val) {
     printf("[Eflags]\tnemu:");
-    for (int i = 0; i < 32; i++) printf("%d", reg_flags & (1 << i));
+    for (int i = 0; i < 32; i++) printf("%d", reg_flags & (1 << i)? 1: 0);
     printf("B\tqemu:");
-    for (int i = 0; i < 32; i++) printf("%d", ref_r->eflags.val & (1 << i));
+    for (int i = 0; i < 32; i++) printf("%d", ref_r->eflags.val & (1 << i)?1: 0);
     printf("B\n");
   }
   return true;
