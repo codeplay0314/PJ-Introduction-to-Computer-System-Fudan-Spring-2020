@@ -7,9 +7,14 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
       printf("[reg %d]\tnemu: 0x%x\tqemu: 0x%x\n", i, reg_l(i), ref_r->gpr[i]._32);
       return false;
     }
-    printf("0x%x ", ref_r->gpr[i]._32);
   }
-  putchar('\n');
+  if (reg_flags != ref_r->eflags.val) {
+    printf("[Eflags]\tnemu:");
+    for (int i = 0; i < 32; i++) printf("%d", reg_flags & (1 << i));
+    printf("B\tqemu:");
+    for (int i = 0; i < 32; i++) printf("%d", ref_r->eflags.val & (1 << i));
+    printf("B\n");
+  }
   return true;
 }
 
