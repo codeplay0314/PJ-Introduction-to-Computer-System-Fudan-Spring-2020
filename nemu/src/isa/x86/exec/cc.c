@@ -16,35 +16,28 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
     switch (subcode & 0xe) {
     case CC_O:
       rtl_get_OF(dest);
-      printf("CC_O\n");
       break;
     case CC_B:
       rtl_get_CF(dest);
-      printf("CC_B\n");
       break;
     case CC_E:
       rtl_get_ZF(dest);
-      printf("CC_E\n");
       break;
     case CC_BE:
       rtl_get_CF(&t0);
       rtl_get_ZF(&t1);
       rtl_or(dest, &t0, &t1);
-      printf("CC_BE\n");
       break;
     case CC_S:
       rtl_get_SF(dest);
-      printf("CC_S\n");
       break;
     case CC_L:
       rtl_get_SF(&t0);
       rtl_get_OF(&t1);
       rtl_xor(dest, &t0, &t1);
-      printf("CC_L\n");
       break;
     case CC_LE:{
       rtl_li(dest, ((cpu.eflags.ZF) || (cpu.eflags.SF != cpu.eflags.OF)));
-      printf("CC_LE\n");
       break;
     }
     default: panic("should not reach here");
