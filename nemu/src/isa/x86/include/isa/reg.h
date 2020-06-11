@@ -31,25 +31,23 @@ typedef struct{
     struct {
       rtlreg_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
     };
-
-    union {
-        struct {
-            uint32_t CF: 1;
-            unsigned: 5;
-            uint32_t ZF: 1;
-            uint32_t SF: 1;
-            unsigned: 1;
-            uint32_t IF: 1;
-            unsigned: 1;
-            uint32_t OF: 1;
-            unsigned: 20;
-        };
-        rtlreg_t val;
-      }eflags;
-
   };
-
   vaddr_t pc;
+
+  union {
+    rtlreg_t val;
+    struct {
+      uint32_t CF: 1;
+      unsigned: 5;
+      uint32_t ZF: 1;
+      uint32_t SF: 1;
+      unsigned: 1;
+      uint32_t IF: 1;
+      unsigned: 1;
+      uint32_t OF: 1;
+      unsigned: 20;
+    };
+  }eflags;
 
 } CPU_state;
 
@@ -60,6 +58,7 @@ static inline int check_reg_index(int index) {
 
 #define reg_l(index) (cpu.gpr[check_reg_index(index)]._32)
 #define reg_w(index) (cpu.gpr[check_reg_index(index)]._16)
+#define reg_flags (cpu.eflags.val)
 /*TODO finish the reg_b(index) as above, reg_b(index) takes the 8 bits register.
  * Examples: reg_b(0) takes al register, however reg_b(4) takes ah register. al and ah are the lower and upper 8 bits of register ax
  * note that index are range(0, 8)
