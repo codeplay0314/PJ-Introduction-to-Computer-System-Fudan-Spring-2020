@@ -39,17 +39,17 @@ void cpu_exec(uint64_t n) {
   }
 
   for (; n > 0; n --) {
-    printf("[%lu]\n", n);
     __attribute__((unused)) vaddr_t ori_pc = cpu.pc;
 
     /* Execute one instruction, including instruction fetch,
      * instruction decode, and the actual execution. */
     __attribute__((unused)) vaddr_t seq_pc = exec_once();
-
+    printf("[%d]\n", nemu_state.state == NEMU_RUNNING);
 #if defined(DIFF_TEST)
   difftest_step(ori_pc, cpu.pc);
 #endif
 
+    printf("[%d]\n", nemu_state.state == NEMU_RUNNING);
 #ifdef DEBUG
   if (g_nr_guest_instr < LOG_MAX) {
     asm_print(ori_pc, seq_pc - ori_pc, n < MAX_INSTR_TO_PRINT);
