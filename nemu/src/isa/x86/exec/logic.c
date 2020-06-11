@@ -69,9 +69,6 @@ make_EHelper(setcc) {
   rtl_setcc(&s0, cc);
   operand_write(id_dest, &s0);
 
-  // MISTAKE
-  rtl_get_ZF(&cpu.gpr[3]._32);
-
   print_asm("set%s %s", get_cc_name(cc), id_dest->str);
 }
 
