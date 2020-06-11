@@ -2,7 +2,7 @@
 
 CPU_state cpu;
 
-rtlreg_t s0, s1, t0, t1, ir;
+rtlreg_t s0, s1, s2, t0, t1, ir;
 
 /* shared by all helper functions */
 DecodeInfo decinfo;
@@ -14,6 +14,7 @@ void decinfo_set_jmp(bool is_jmp) {
 void isa_exec(vaddr_t *pc);
 
 vaddr_t exec_once(void) {
+//  printf("[OK: 0x%x]\n", decinfo.seq_pc);
   decinfo.seq_pc = cpu.pc;
   isa_exec(&decinfo.seq_pc);
   update_pc();

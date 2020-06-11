@@ -2,19 +2,36 @@
 #include "cc.h"
 
 make_EHelper(test) {
-  TODO();
+  rtl_and(&s0, &id_dest->val, &id_src->val);
+  s1 = 1;
+  rtl_set_CF(&s1);
+  rtl_set_OF(&s1);
+  rtl_update_ZFSF(&s0, id_dest->width);
 
   print_asm_template2(test);
 }
 
 make_EHelper(and) {
-  TODO();
+  rtl_and(&s1, &id_dest->val, &id_src->val);
+  operand_write(id_dest, &s1);
+
+  rtl_update_ZFSF(&s0, id_dest->width);
+  s0 = 0;
+  rtl_set_OF(&s0);
+  rtl_set_CF(&s0);
 
   print_asm_template2(and);
 }
 
 make_EHelper(xor) {
-  TODO();
+  rtl_xor(&id_dest->val, &id_dest->val, &id_src->val);
+  operand_write(id_dest, &id_dest->val);
+
+  rtl_li(&s0,0);
+
+  rtl_set_CF(&s0);
+  rtl_set_OF(&s0);
+  rtl_update_ZFSF(&id_dest->val, id_dest->width);
 
   print_asm_template2(xor);
 }

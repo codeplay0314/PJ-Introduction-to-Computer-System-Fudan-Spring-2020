@@ -6,13 +6,14 @@ make_EHelper(mov) {
 }
 
 make_EHelper(push) {
-  TODO();
-
+  s0 = id_dest->val;
+  rtl_push(&s0);
   print_asm_template1(push);
 }
 
 make_EHelper(pop) {
-  TODO();
+  rtl_pop(&id_src->val);
+  operand_write(id_dest, &id_src->val);
 
   print_asm_template1(pop);
 }
@@ -30,8 +31,8 @@ make_EHelper(popa) {
 }
 
 make_EHelper(leave) {
-  TODO();
-
+  rtl_mv(&cpu.esp, &cpu.ebp);
+  rtl_pop(&cpu.ebp);
   print_asm("leave");
 }
 

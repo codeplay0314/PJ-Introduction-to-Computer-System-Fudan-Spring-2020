@@ -1,20 +1,58 @@
 #include "cpu/exec.h"
 
 make_EHelper(add) {
-  TODO();
+  rtl_add(&s2, &id_dest->val, &id_src->val);
+  operand_write(id_dest, &s2);
+
+  rtl_update_ZFSF(&s2, id_dest->width);
+
+  rtl_is_add_carry(&s0, &s2, &id_dest->val);
+  rtl_set_CF(&s0);
+
+  rtl_xor(&s0, &id_dest->val, &id_src->val);
+  rtl_not(&s0, &s0);
+  rtl_xor(&s1, &id_dest->val, &s2);
+  rtl_and(&s0, &s0, &s1);
+  rtl_msb(&s0, &s0, id_dest->width);
+  rtl_set_OF(&s0);
 
   print_asm_template2(add);
 }
 
 make_EHelper(sub) {
-  TODO();
+  rtl_sub(&s0, &id_dest->val, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &s1, &id_dest->val, &s0);
+  operand_write(id_dest, &s0);
+
+  rtl_update_ZFSF(&s0, id_dest->width);
+
+  rtl_setrelop(RELOP_LTU, &s0, &id_dest->val, &s0);
+  rtl_or(&s0, &s1, &s0);
+  rtl_set_CF(&s0);
+
+  rtl_xor(&s0, &id_dest->val, &id_src->val);
+  rtl_xor(&s1, &id_dest->val, &s0);
+  rtl_and(&s0, &s0, &s1);
+  rtl_msb(&s0, &s0, id_dest->width);
+  rtl_set_OF(&s0);
 
   print_asm_template2(sub);
 }
 
 make_EHelper(cmp) {
-  TODO();
+  rtl_sub(&s0, &id_dest->val, &id_src->val);
 
+  rtl_update_ZFSF(&s0, id_dest->width);
+
+  rtl_is_add_carry(&s1, &id_dest->val, &id_src->val);
+  rtl_set_CF(&s1);
+
+  rtl_xor(&s0, &id_dest->val, &s0);
+  rtl_xor(&s1, &id_dest->val, &id_src->val);
+  rtl_and(&s0, &s1, &s0);
+  rtl_msb(&s0, &s0, id_dest->width);
+  rtl_set_OF(&s0);
+  
   print_asm_template2(cmp);
 }
 
