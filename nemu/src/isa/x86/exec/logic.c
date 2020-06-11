@@ -69,6 +69,7 @@ make_EHelper(setcc) {
   rtl_setcc(&s0, cc);
   operand_write(id_dest, &s0);
 
+  printf("-- %s --\n", get_cc_name(cc));
   print_asm("set%s %s", get_cc_name(cc), id_dest->str);
 }
 
