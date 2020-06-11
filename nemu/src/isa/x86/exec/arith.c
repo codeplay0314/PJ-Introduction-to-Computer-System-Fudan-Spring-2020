@@ -42,6 +42,7 @@ make_EHelper(sub) {
 make_EHelper(cmp) {
   rtl_sub(&s0, &id_dest->val, &id_src->val);
 
+  printf("///%d//\n", s0);
   rtl_update_ZFSF(&s0, id_dest->width);
 
   rtl_is_add_carry(&s1, &id_dest->val, &id_src->val);
