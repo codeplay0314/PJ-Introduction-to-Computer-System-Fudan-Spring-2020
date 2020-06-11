@@ -10,7 +10,9 @@
 enum  TK{
   TK_NOTYPE = 256, TK_EQ = 257,
   /* TODO: Add more token types */
-  TK_DEC = 10, TK_HEX = 16
+  TK_UEQ = 258, TK_MINUS = 259,
+  TK_DEC = 10, TK_HEX = 16,
+  TK_REG = 260, TK_POINTER = 261
 };
 
 static struct rule {
@@ -22,16 +24,21 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {"\\+", '+'},               // plus
-  {"\\-", '-'},               // minus
-  {"\\*", '*'},               // mutiply
-  {"\\/", '/'},               // devide
-  {"\\(", '('},               // left parenthesis
-  {"\\)", ')'},               // right parenthesis
-  {" +", TK_NOTYPE},          // spaces
-  {"==", TK_EQ},              // equal
-  {"0x[0-9a-f]+", TK_HEX},    // hexadecimal number
-  {"[0-9]+", TK_DEC}          // decimal number
+  {" +", TK_NOTYPE},                        // spaces
+  {"\\+", '+'},                             // plus
+  {"\\-", '-'},                             // minus
+  {"\\*", '*'},                             // mutiply
+  {"\\/", '/'},                             // devide
+  {"==", TK_EQ},                            // equal
+  {"!=", TK_UEQ},                           // unequal
+  {"&&", '&'},                              // and
+  {"\\|\\|", '|'},                          // or
+  {"!", '!'},                               // not
+  {"0x[0-9a-f]+", TK_HEX},                  // hexadecimal number
+  {"[0-9]+", TK_DEC},                       // decimal number
+  {"\\$[a-z]{2,3}", TK_REG},            // register
+  {"\\(", '('},                             // left parenthesis
+  {"\\)", ')'}                              // right parenthesis
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -61,10 +68,15 @@ typedef struct token {
   char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+#define token_capacity 200
+static Token tokens[token_capacity] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
+  if (!e) {
+    printf("Please enter an expression.\n");
+    return false;
+  }
   int position = 0;
   int i;
   regmatch_t pmatch;
@@ -78,32 +90,53 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+//        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+//            i, rules[i].regex, position, substr_len, substr_len, substr_start);
         position += substr_len;
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+//         putchar('\n');
+//         for (int cc = 0; cc < substr_len; cc++)
+//           putchar(substr_start[cc]);
         switch (rules[i].token_type) {
+          case '+':
+          case '/':
+          case TK_EQ:
+          case TK_UEQ:
+          case '&':
+          case '|':
+          case '!':
           case TK_DEC:
           case TK_HEX:
-          case '+':
-          case '-':
-          case '*':
-          case '/':
+          case TK_REG:
           case '(':
-          case ')':
-          case TK_EQ: {
+          case ')': {
+            if (nr_token >= token_capacity)
+              panic("Too many tokens for the expression!");
             tokens[nr_token].type = rules[i].token_type;
-            strncpy(tokens[nr_token++].str, substr_start, substr_len);
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token++].str[substr_len] = 0;
+          }break;
+          case '-':
+          case '*': {
+            if (nr_token >= token_capacity)
+              panic("Too many tokens for the expression!");
+            if (!nr_token || (tokens[nr_token - 1].type != TK_DEC && tokens[nr_token - 1].type != TK_HEX \
+              && tokens[nr_token - 1].type != TK_REG && tokens[nr_token - 1].type != ')'))
+                tokens[nr_token].type = rules[i].token_type == '*'? TK_POINTER: TK_MINUS;
+            else
+              tokens[nr_token].type = rules[i].token_type;
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token++].str[substr_len] = 0;
           }break;
           case TK_NOTYPE: break;
           default: return false;
         }
 
+//        puts("--");
         break;
       }
     }
@@ -111,6 +144,13 @@ static bool make_token(char *e) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
+  }
+//   for (int i = 0; i < nr_token; i++)
+//     printf("%s", tokens[i].str);
+//   putchar('\n');
+  if (!nr_token) {
+    printf("Please enter an expression.\n");
+    return false;
   }
   return true;
 }
@@ -137,19 +177,51 @@ bool check_parentheses(int start, int end, bool *success) {
 }
 
 int eval(int start, int end, bool *success) {
-  //printf("[%d %d]\n", start, end);
+//  printf("[%d %d] %d\n", start, end, *success);
   if (start > end) {
     *success = false;
     return 0;
   }
   else if (start == end) {
     /* Single token.
-     * For now this token should be a number.
+     * For now this token should be a number or register.
      * Return the value of the number.
      */
+
+   //printf("--%s--\n", tokens[start].str);
+   const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
+   const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
+   const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
    int res = 0;
    if (tokens[start].type == TK_DEC) sscanf(tokens[start].str, "%d", &res);
    else if (tokens[start].type == TK_HEX) sscanf(tokens[start].str, "%x", &res);
+   else if (tokens[start].type == TK_REG) {
+     bool ok = false;
+     if (!strcmp(tokens[start].str + 1, "pc")) res = isa_vaddr_read(cpu.pc, 8), ok = true;
+     else {
+       for (int i = 0; i < 8; i++) {
+         if (!strcmp(tokens[start].str + 1, regsl[i])) {
+           ok = true;
+           res = reg_l(i);
+           break;
+         }
+         if (!strcmp(tokens[start].str + 1, regsw[i])) {
+           ok = true;
+           res = reg_w(i);
+           break;
+         }
+         if (!strcmp(tokens[start].str + 1, regsb[i])) {
+           ok = true;
+           res = reg_b(i);
+           break;
+         }
+       }
+     }
+     if (!ok) {
+       printf("\"%s\" is not a valid register name. ", tokens[start].str + 1);
+       *success = false;
+     }
+   }
    else *success = false;
    return res;
   }
@@ -170,31 +242,60 @@ int eval(int start, int end, bool *success) {
       if (tk == '(') cnt++;
       else if (tk == ')') cnt--;
       else if (!cnt) {
-        if (tk == TK_EQ) {
-          mainop = i;
-          break;
+        if (tk == TK_POINTER) continue;
+        else if (tk == '|') mainop = i;
+        else if (tk == '&') {
+          if (tokens[mainop].type != '|') mainop = i;
         }
-        else if (tk == '+' || tk == '-') mainop = i;
+        else if (tk == TK_EQ || tk == TK_UEQ) {
+            if (tokens[mainop].type != '&' && tokens[mainop].type != '|') mainop = i;
+        }
+        else if (tk == '+' || tk == '-') {
+          if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
+            tokens[mainop].type != TK_EQ && tokens[mainop].type != TK_UEQ) mainop = i;
+        }
         else if (tk == '*' || tk == '/') {
-          if (tokens[mainop].type != '+' && tokens[mainop].type != '-') mainop = i;
+          if (tokens[mainop].type != '&' && tokens[mainop].type != '|' && \
+            tokens[mainop].type != TK_EQ && tokens[mainop].type != TK_UEQ && \
+              tokens[mainop].type != '+' && tokens[mainop].type != '-') mainop = i;
         }
       }
     }
 
-    //printf("---%d---\n", mainop);
-    int res1 = eval(start, mainop - 1, success), res2 = eval(mainop + 1, end, success);
-    if (*success) {
-      //printf("[%d %d]\n", start, end);
+//    printf("---%d---\n", mainop);
+    int res = 0;
+    if (mainop == start) {
+      res = eval(start + 1, end, success);
+      if (*success) {
+        switch (tokens[mainop].type) {
+          case '!': res =  !res; break;
+          case TK_MINUS: res =  -res; break;
+          case TK_POINTER: res =  isa_vaddr_read(res, 4); break;
+          default: *success = 0;
+        }
+      }
+    } else if (*success) {
+      int res1 = eval(start, mainop - 1, success), res2 = eval(mainop + 1, end, success);
       switch (tokens[mainop].type) {
-        case '+': printf("%d\n", res1 + res2); return res1 + res2;
-        case '-': printf("%d\n", res1 - res2); return res1 - res2;
-        case '*': printf("%d\n", res1 * res2); return res1 * res2;
-        case '/': printf("%d\n", res1 / res2); return res1 / res2;
-        case TK_EQ: printf("%d\n", res1 == res2); return res1 == res2;
+        case '+': res = res1 + res2; break;
+        case '-': res = res1 - res2; break;
+        case '*': res = res1 * res2; break;
+        case '/':
+          if (res2 == 0) {
+            printf("Error: Division by zero.\n");
+            return 0;
+          }
+          res = res1 / res2;
+          break;
+        case '&': res = res1 && res2; break;
+        case '|': res = res1 || res2; break;
+        case TK_EQ: res = res1 == res2; break;
+        case TK_UEQ: res = res1 != res2; break;
         default: *success = 0;
       }
     }
-    return 0;
+//    printf("$%d %d %d$\n", start, end, res);
+    return res;
   }
   return 0;
 }
@@ -206,8 +307,9 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  int res = eval(0, nr_token - 1, success);
   if (*success == false)
     printf("Please enter valid expression\n");
-  return res;
+  else
+   return eval(0, nr_token - 1, success);
+  return 0;
 }

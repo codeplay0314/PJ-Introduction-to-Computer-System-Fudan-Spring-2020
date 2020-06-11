@@ -17,6 +17,8 @@ static int cmd_ls(char *);
 static int cmd_info(char *);
 static int cmd_p(char *);
 static int cmd_x(char *);
+static int cmd_w(char *);
+static int cmd_d(char *);
 
 void cpu_exec(uint64_t);
 void isa_reg_display();
@@ -67,6 +69,8 @@ static struct {
   { "echo", "Print the characters given by user", cmd_echo }, // add by wuran
   { "pwd", "Print current work path", cmd_pwd }, // add by wuran
   { "ls", "List all files in give path", cmd_ls },
+  { "w", "Add a new watchpoint", cmd_w },
+  { "d", "Delete a watchpoint or all watchpoints", cmd_d },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0])) // number of commands
@@ -165,24 +169,19 @@ static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
 
 	if(arg == NULL) {
-	  printf("Please enter \"r\" or \"pc\" after \"info\"\n");
+	  printf("Please enter \"r\" or \"pc\" or \"w\" after \"info\"\n");
 	  return 0;
 	}
 
 	if (!strcmp(arg, "r")) {
-		printf("%%eax\t0x%x\n", reg_l(0));
-    printf("%%ecx\t0x%x\n", reg_l(1));
-    printf("%%edx\t0x%x\n", reg_l(2));
-    printf("%%ebx\t0x%x\n", reg_l(3));
-    printf("%%esp\t0x%x\n", reg_l(4));
-    printf("%%ebp\t0x%x\n", reg_l(5));
-    printf("%%esi\t0x%x\n", reg_l(6));
-    printf("%%edi\t0x%x\n", reg_l(7));
+    isa_reg_display();
   }
   else if (!strcmp(arg, "pc"))
     printf("\033[1m\033[33m[pc]:\033[0m , address: 0x%x, value: 0x%x\n", cpu.pc, isa_vaddr_read(cpu.pc, 8));
+  else if (!strcmp(arg, "w"))
+    print_wp();
   else
-    printf("Please enter \"r\" or \"pc\" after \"info\"\n");
+    printf("Please enter \"r\" or \"pc\" or \"w\" after \"info\"\n");
   return 0;
 }
 static int cmd_p(char *args) {
@@ -214,6 +213,28 @@ static int cmd_x(char *args) {
     for (int j = 0; j < 4; j++)
       printf("\t0x%02x", *(p++));
     putchar('\n');
+  }
+  return 0;
+}
+
+static int cmd_w(char *args) {
+  bool success = true;
+  int val = expr(args, &success);
+  if (success) new_wp(args, val);
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  char *arg = strtok(NULL, " ");
+
+  if(arg == NULL) delete_all_wp();
+  else {
+    int n;
+    if (!sscanf(arg, "%d", &n) || n <= 0) {
+      printf("Please enter positive interger!\n");
+      return 0;
+    }
+    free_wp(n);
   }
   return 0;
 }

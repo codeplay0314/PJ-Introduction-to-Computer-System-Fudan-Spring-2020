@@ -43,8 +43,39 @@ void reg_test() {
 void isa_reg_display() {
   /*TODO please print information of registers
   */
+	printf("%%eax\t0x%x\n", reg_l(0));
+  printf("%%ecx\t0x%x\n", reg_l(1));
+  printf("%%edx\t0x%x\n", reg_l(2));
+  printf("%%ebx\t0x%x\n", reg_l(3));
+  printf("%%esp\t0x%x\n", reg_l(4));
+  printf("%%ebp\t0x%x\n", reg_l(5));
+  printf("%%esi\t0x%x\n", reg_l(6));
+  printf("%%edi\t0x%x\n", reg_l(7));
 }
 
 uint32_t isa_reg_str2val(const char *s, bool *success) {
-  return 0;
+  int res = 0;
+  bool ok = false;
+  if (!strcmp(s, "pc")) res = isa_vaddr_read(cpu.pc, 8), ok = true;
+  else {
+    for (int i = 0; i < 8; i++) {
+      if (!strcmp(s, regsl[i])) {
+        ok = true;
+        res = reg_l(i);
+        break;
+      }
+      if (!strcmp(s, regsw[i])) {
+        ok = true;
+        res = reg_w(i);
+        break;
+      }
+      if (!strcmp(s, regsb[i])) {
+        ok = true;
+        res = reg_b(i);
+        break;
+      }
+    }
+  }
+  *success = ok;
+  return res;
 }
