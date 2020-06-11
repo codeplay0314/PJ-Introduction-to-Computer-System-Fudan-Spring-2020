@@ -17,6 +17,7 @@ static void restart() {
   /* Set the initial program counter. */
   cpu.pc = PC_START;
   cpu.eflags.val = 0x2;
+  printf("-- %x %x %x %x %x--", cpu.eflags.CF, cpu.eflags.ZF, cpu.eflags.SF, cpu.eflags.IF, cpu.eflags.OF);
 }
 
 void init_isa(void) {
