@@ -95,6 +95,7 @@ void difftest_step(vaddr_t ori_pc, vaddr_t next_pc) {
 
   if (is_detach) return;
 
+    printf("[%d]\n", nemu_state.state == NEMU_RUNNING);
   if (skip_dut_nr_instr > 0) {
     ref_difftest_getregs(&ref_r);
     if (ref_r.pc == next_pc) {
@@ -107,6 +108,7 @@ void difftest_step(vaddr_t ori_pc, vaddr_t next_pc) {
       panic("can not catch up with ref.pc = %x at pc = %x", ref_r.pc, ori_pc);
     return;
   }
+    printf("[%d]\n", nemu_state.state == NEMU_RUNNING);
 
   if (is_skip_ref) {
     // to skip the checking of an instruction, just copy the reg state to reference design
@@ -114,11 +116,14 @@ void difftest_step(vaddr_t ori_pc, vaddr_t next_pc) {
     is_skip_ref = false;
     return;
   }
+    printf("[%d]\n", nemu_state.state == NEMU_RUNNING);
 
   ref_difftest_exec(1);
   ref_difftest_getregs(&ref_r);
+    printf("[%d]\n", nemu_state.state == NEMU_RUNNING);
 
   checkregs(&ref_r, ori_pc);
+    printf("[%d]\n", nemu_state.state == NEMU_RUNNING);
 }
 
 void difftest_detach() {
