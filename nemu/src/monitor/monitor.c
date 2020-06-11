@@ -12,7 +12,7 @@ void init_difftest(char *ref_so_file, long img_size);
 static char *mainargs = "";
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
-static char *img_file = NULL;
+static char *img_file = "/home/codeplay0314/ics2020/nexus-am/tests/cputest/build/add-x86-nemu.bin";
 static int is_batch_mode = false;
 
 static inline void welcome() {
